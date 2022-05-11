@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "/q5KGP+G/lOrHGkMLKgBiTsZLJBdZAuBJ+mvQhd0HnOQlaTLQ830xtxCgIhvZqSs3ZdzZTXoRqyDf5x1+oWAbA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Pikachu\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.16\\microsoft.netcore.app.host.win-x64.5.0.16.nupkg.sha512"
+  ],
+  "logs": []
+}
