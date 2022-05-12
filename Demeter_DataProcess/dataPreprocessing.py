@@ -50,9 +50,7 @@ class WeatherDataPreprocessing:
         self._df['Time'] = [s.strftime('%Y-%m-%d %H:%M:%S') for s in self._df['Time']]
         self._df['Wind'] = self._df['Wind'].replace("Calm", "0 Km/h").str.extract(r'(\d+?)(?= \D)')
         self._df['Temperature'] = self._df['Temperature'].str.extract(r'(\d+)')
-        self._df['Relative Temperature'] = self._df['Relative Temperature'].str.extract(r'(\d+)')
         self._df['Rel. humidity'] = self._df['Rel. humidity'].str.extract(r'(\d+)')
-        self._df['Dew Point'] = self._df['Dew Point'].str.extract(r'(\d+)')
         self._df['Pressure'] = self._df['Pressure'].str.extract(r'([^a-zA-Z]+)')
     
     def generateCleannedData(self, folder: str):
@@ -71,7 +69,7 @@ class WeatherDataPreprocessing:
                 continue
             temp_df = self._df[self._df['Date'] == date]
             temp_df.index= np.arange(len(temp_df))
-            temp_df = temp_df.drop(columns = ['Date'])
+            temp_df = temp_df.drop(columns = ['Date', 'Relative Temperature', 'Dew Point'])
             temp_df = temp_df.rename(columns= {"Rel. humidity": "Humidity"})
             temp_df.to_json(f'./{folder}/{date}.json')
         
