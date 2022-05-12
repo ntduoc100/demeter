@@ -66,7 +66,7 @@ if __name__=='__main__':
     
     connection_str = f'mongodb+srv://root:{args[0]}@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     # connection_str = 'mongodb://demeterdb:27017'
-    connection_str = 'mongodb://localhost:27017'
+    # connection_str = 'mongodb://localhost:27017'
     realtime_object = RealtimeWeather()
     realtime_object.connect(connection_str, 'demeter')
     realtime_object.update_current_weather()
