@@ -76,13 +76,15 @@ if __name__=='__main__':
     # if len(args) > 1:
     #     sys.exit()
     
-    # connection_str = f'mongodb+srv://root:{args[0]}@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    connection_str = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+
     # connection_str = 'mongodb://localhost:27017'
-    connection_str = 'mongodb://demeterdb:27017'
+    # connection_str = 'mongodb://demeterdb:27017'
 
     client = pymongo.MongoClient(connection_str)
 
     db = client.get_database('demeter')
-    collection = db.get_collection('region_data')
-    collection.insert_many(regions)
+    if 'region_data' not in db.list_collection_names():
+        collection = db.get_collection('region_data')
+        collection.insert_many(regions)
     

@@ -1,7 +1,7 @@
 import pymongo
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import threading as th
 import signal
 
@@ -60,13 +60,9 @@ class RealtimeWeather:
         regions_data = region_data_collection.find(
             {}, {'_id': False, 'id': True, 'region': True})
 
-        
-        #############
-        # Test
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        print("Real-time: Current Time =", current_time)
-        #############
+        # Get current time
+        now = (datetime.now() + timedelta(hours=7)).strftime("%Y-%m-%dT%H:%M:%S")
+
         for region in regions_data:
             api_url = f'https://api.openweathermap.org/data/2.5/weather?id={region["id"]}&appid={self._api_key}'
 
@@ -81,9 +77,7 @@ class RealtimeWeather:
             jsondata = self._transform_api(
                 jsondata,
                 region['region'],
-                datetime.utcfromtimestamp(
-                    jsondata['dt'] + jsondata['timezone'])
-                .strftime("%Y-%m-%dT%H:%M:%S")
+                now
             )
 
             # Update
@@ -92,10 +86,6 @@ class RealtimeWeather:
                 {'$set': jsondata},
                 upsert=True,
             )
-        #############
-        # Test
-        print('Done')
-        #############
 
     def insert_weather_30_min(self):
         '''
@@ -110,11 +100,8 @@ class RealtimeWeather:
         regions_data = region_data_collection.find(
             {}, {'_id': False, 'id': True, 'region': True})
 
-        #############
-        # Test
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        print("30 interval: Current Time =", current_time)
+        # Get current time
+        now = (datetime.now() + timedelta(hours=7)).strftime("%Y-%m-%dT%H:%M:%S")
 
         #############
         for region in regions_data:
@@ -131,15 +118,11 @@ class RealtimeWeather:
             jsondata = self._transform_api(
                 jsondata,
                 region['region'],
-                datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                now
             )
 
             # Insert data
             historical_data_collection.insert_one(jsondata)
-        #############
-        # Test
-        print('Done')
-        #############
 
 
 class Job(th.Thread):
@@ -147,23 +130,27 @@ class Job(th.Thread):
     Description:
     - Create thread job that run forever
     '''
-    def __init__(self, worker, interval):
+    def __init__(self, worker, runner, interval=0.5):
+        '''
+        Parameters:
+        - worker: function where the code should be run in the thread
+        - interval: amount of time between executions
+        - runner: function that wrap the worker with additional code
+        '''
         th.Thread.__init__(self)
 
         self.shutdown_flag = th.Event()
         self.worker = worker
         self.interval = interval
+        self.runner = runner
     
     def run(self):
         print('Thread #%s started' % self.ident)
  
         while not self.shutdown_flag.is_set():
             # Job code
-            start = time.time()
-            self.worker()
-            end = time.time()
-            run_time = round(end - start, 0)
-            time.sleep(self.interval - run_time)
+            self.runner(self.worker, self.interval)
+            
     
         print('Thread #%s stopped' % self.ident)
 
@@ -178,11 +165,26 @@ def service_shutdown(signum, frame):
     '''Raise exception to stop the program when a terminate signal received'''
     raise ServiceExit
         
+def interval_runner(worker, interval):
+    '''Only start at minute 0 or 30'''
+    cur_min, cur_sec = datetime.now().strftime(r'%M-%S').split('-')
+    if (cur_min == '00' or cur_min == '30') and int(cur_sec) <= 10:
+        worker()
 
+def realtime_runner(worker, interval):
+    '''Collect data, keep the interval accuracy'''
+    cur_sec = datetime.now().strftime(r'%S')
+    start = time.time()
+    worker()
+    end = time.time()
+    run_time = round(end - start, 0)
+    time.sleep(interval - run_time)
+
+            
 if __name__ == '__main__':
 
-    # connection_str = f'mongodb+srv://root:12345ADMIN}@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    connection_str = 'mongodb://demeterdb:27017'
+    connection_str = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    # connection_str = 'mongodb://demeterdb:27017'
     # connection_str = 'mongodb://localhost:27017'
 
     realtime_object = RealtimeWeather()
@@ -196,8 +198,8 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, service_shutdown)
 
     try:
-        realtime = Job(realtime_object.update_current_weather, 300)
-        interval_30 = Job(realtime_object.insert_weather_30_min, 1800)
+        realtime = Job(realtime_object.update_current_weather, realtime_runner, 60)
+        interval_30 = Job(realtime_object.insert_weather_30_min, interval_runner)
 
         realtime.start()
         interval_30.start()
@@ -213,4 +215,3 @@ if __name__ == '__main__':
         # Wait for the threads to close...
         realtime.join()
         interval_30.join()
-    
