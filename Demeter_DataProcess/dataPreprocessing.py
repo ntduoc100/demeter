@@ -52,6 +52,9 @@ class WeatherDataPreprocessing:
         self._df['Temperature'] = self._df['Temperature'].str.extract(r'(\d+)')
         self._df['Rel. humidity'] = self._df['Rel. humidity'].str.extract(r'(\d+)')
         self._df['Pressure'] = self._df['Pressure'].str.extract(r'([^a-zA-Z]+)')
+        self._df.index= np.arange(len(self._df))
+        self._df = self._df.drop(columns = ['Date', 'Relative Temperature', 'Dew Point'])
+        self._df = self._df.rename(columns= {"Rel. humidity": "Humidity"})
     
     def generateCleannedData(self, folder: str):
         '''
@@ -61,17 +64,10 @@ class WeatherDataPreprocessing:
         Description:
         From the data we have already preprocessed, store them into `folder`, in date order.
         '''
-        dates = self._df['Date'].unique()
         if folder not in os.listdir("./"):
             os.makedirs(f"./{folder}")
-        for date in dates:
-            if date in os.listdir(f"./{folder}"):
-                continue
-            temp_df = self._df[self._df['Date'] == date]
-            temp_df.index= np.arange(len(temp_df))
-            temp_df = temp_df.drop(columns = ['Date', 'Relative Temperature', 'Dew Point'])
-            temp_df = temp_df.rename(columns= {"Rel. humidity": "Humidity"})
-            temp_df.to_json(f'./{folder}/{date}.json')
+
+        self._df.to_json(f'./{folder}/preprocessed-data.json')
         
 if __name__ == "__main__":
     cities = [
