@@ -36,7 +36,7 @@ class RealtimeWeather:
 
         return {
             'Time': modified_time,
-            'Temperature': round(jsondata['main']['temp'] - 272.15, 2),
+            'Temperature': round(jsondata['main']['temp'] - 272.15, 0),
             'Wind': jsondata['wind']['speed'],
             'Humidity': jsondata['main']['humidity'],
             'Pressure': jsondata['main']['pressure'],
@@ -55,7 +55,7 @@ class RealtimeWeather:
 
         # Set cursors
         region_data_collection = self._db.get_collection('region_data')
-        realtime_data_collection = self._db.get_collection('realtime_weather')
+        realtime_data_collection = self._db.get_collection('realtime_data')
 
         regions_data = region_data_collection.find(
             {}, {'_id': False, 'id': True, 'region': True})
@@ -183,7 +183,7 @@ def realtime_runner(worker, interval):
             
 if __name__ == '__main__':
 
-    connection_str = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    connection_str = 'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     # connection_str = 'mongodb://demeterdb:27017'
     # connection_str = 'mongodb://localhost:27017'
 
