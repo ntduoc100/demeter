@@ -59,17 +59,20 @@ class Updater:
         in the provided collectionl name
         '''
 
+        # Check for region_data existence
+        if 'region_data' not in self._db.list_collection_names():
+            raise Exception('region_data did not exists')
+
         # Set cursors
         region_data_collection = self._db.get_collection('region_data')
         collection_to_update = self._db.get_collection(collname)
 
         # Filter data
         regions_data = region_data_collection.find(
-            {}, {'_id': False, 'id': True, 'region': True})
+            {}, {'_id': True, 'id': True})
 
         # Get current time
-        now = (datetime.now() + timedelta(hours=7)
-               ).strftime("%Y-%m-%dT%H:%M:%S")
+        now = (datetime.now() + timedelta(hours=7)).replace(second=0).strftime("%Y-%m-%dT%H:%M:%S")
 
         for region in regions_data:
             api_url = f'https://api.openweathermap.org/data/2.5/weather?id={region["id"]}&appid={self._api_key}'
@@ -84,7 +87,7 @@ class Updater:
             jsondata = response.json()
             jsondata = self._transform_api(
                 jsondata,
-                region['region'],
+                region['_id'],
                 now
             )
 
@@ -102,9 +105,22 @@ class UpdaterRealtime(Updater):
     def __init__(self, connection_string: str, dbname: str):
         super().__init__(connection_string, dbname)
 
+    def _transform_api(self, jsondata: dict, region_name: str, modified_time: str):
+        '''
+        This function will convert raw json data to a formatted one 
+        '''
+        return {
+            'Time': modified_time,
+            'Temperature': round(jsondata['main']['temp'] - 272.15, 0),
+            'Wind': jsondata['wind']['speed'],
+            'Humidity': jsondata['main']['humidity'],
+            'Pressure': jsondata['main']['pressure'],
+            '_id': region_name
+        }
+
     def _query_func(self, collection, **kwargs):
         collection.find_one_and_update(
-            {'Place': kwargs['region']['region']},
+            {'_id': kwargs['region']['_id']},
             {'$set': kwargs['jsondata']},
             upsert=True,
         )
@@ -166,7 +182,8 @@ def service_shutdown(signum, frame):
 def interval_runner(worker, interval, **kwargs):
     '''Only start at minute 0 or 30'''
     cur_min, cur_sec = datetime.now().strftime(r'%M-%S').split('-')
-    if (cur_min == '00' or cur_min == '30') and int(cur_sec) <= 10:
+    if (cur_min == '00' or cur_min == '30') and int(cur_sec) <= 0.5:
+        # Fix time
         worker(kwargs['collname'])
 
 
@@ -202,7 +219,7 @@ if __name__ == '__main__':
             'realtime',
             realtime_object.update,
             realtime_runner,
-            60,
+            120, # Change this to change the time between api calls for real time
             collname='realtime_data'
         )
 
