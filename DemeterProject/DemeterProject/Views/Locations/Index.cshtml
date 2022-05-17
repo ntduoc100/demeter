@@ -1,0 +1,58 @@
+﻿@model IEnumerable<DemeterProject.Models.Location>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LocationName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LocationID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LocationID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LocationID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@
+
+<div class="container">
+    <div style="background-color: white;">
+        <div class="grid-container" style="display: grid; grid-template-rows: 300px 200px 300px; gap: 12px; width: 100%">
+            <div class="item1" style="grid-area: 1/1/3/3">
+                <div style="height: 50%; margin-bottom: 8px; background-image: url(https://thelivenagpur.com/wp-content/uploads/2020/02/cloudy.jpg); border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2); ">
+                    <div style="height: 20%; background-color: #367C60">
+                        <p style="color: white">Location here</p>
+                    </div>
+                    <p style="color: white">Weather Information here</p>
+                </div>
+                <div style="width: 100%; height: 80%; margin-bottom: 10px; background-color: aquamarine; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">Weather Information here</div>
+                <div class="row" style="height: 60%; width: 100%; margin-left: 0px; background-color: aquamarine; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
+                    <div style="height: 95%; width: 19%; margin: 5px; margin-top: 7px; margin-left: 8px; background-color: beige"> day 1</div>
+                    <div style="height: 95%; width: 19%; margin: 5px; margin-top: 7px; background-color: beige"> day 2</div>
+                    <div style="height: 95%; width: 19%; margin: 5px; margin-top: 7px; background-color: beige"> day 3</div>
+                    <div style="height: 95%; width: 19%; margin: 5px; margin-top: 7px; background-color: beige"> day 4</div>
+                    <div style="height: 95%; width: 19%; margin: 5px; margin-top: 7px; background-color: beige"> day 5</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

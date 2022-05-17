@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj": {}
+    "C:\\Users\\Omachi\\Documents\\GitHub\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj": {
+    "C:\\Users\\Omachi\\Documents\\GitHub\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj",
+        "projectUniqueName": "C:\\Users\\Omachi\\Documents\\GitHub\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj",
         "projectName": "DemeterProject",
-        "projectPath": "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj",
-        "packagesPath": "C:\\Users\\Pikachu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pikachu\\Documents\\demeter\\DemeterProject\\DemeterProject\\obj\\",
+        "projectPath": "C:\\Users\\Omachi\\Documents\\GitHub\\demeter\\DemeterProject\\DemeterProject\\DemeterProject.csproj",
+        "packagesPath": "C:\\Users\\Omachi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Omachi\\Documents\\GitHub\\demeter\\DemeterProject\\DemeterProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Pikachu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Omachi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,6 +39,26 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.16, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -49,12 +69,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[5.0.16, 5.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -63,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
