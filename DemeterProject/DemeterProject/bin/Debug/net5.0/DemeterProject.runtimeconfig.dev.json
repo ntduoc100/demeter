@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\Pikachu\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Pikachu\\.nuget\\packages"
+      "C:\\Users\\Omachi\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Omachi\\.nuget\\packages"
     ]
   }
 }

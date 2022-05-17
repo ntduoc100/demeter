@@ -39,7 +39,6 @@ namespace DemeterProject.Controllers
             {
                 return NotFound();
             }
-
             return View(location);
         }
 
