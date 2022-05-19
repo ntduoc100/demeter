@@ -7,7 +7,7 @@ import signal
 from abc import abstractmethod
 
 MAX_ATTEMPTS = 10
-SLEEP_TIME_FOR_REQUEST = 0.05
+SLEEP_TIME_FOR_REQUEST = 0.5
 
 
 class Updater:
@@ -57,6 +57,9 @@ class Updater:
         - Based on data from region_data collection
         collect data from openweather api and update the data
         in the provided collectionl name
+
+        Returns:
+        - bool: update status
         '''
 
         # Check for region_data existence
@@ -65,35 +68,53 @@ class Updater:
 
         # Set cursors
         region_data_collection = self._db.get_collection('region_data')
-        collection_to_update = self._db.get_collection(collname)
 
         # Filter data
         regions_data = region_data_collection.find(
-            {}, {'_id': True, 'id': True})
+            {}, {'_id': False, 'id': True, 'Place': True})
 
         # Get current time
         now = (datetime.now() + timedelta(hours=7)).replace(second=0).strftime("%Y-%m-%dT%H:%M:%S")
 
+        data = []
         for region in regions_data:
             api_url = f'https://api.openweathermap.org/data/2.5/weather?id={region["id"]}&appid={self._api_key}'
-
-            for _ in range(MAX_ATTEMPTS):
+            
+            nb_attempts = 0
+            jsondata = None
+            
+            while nb_attempts < MAX_ATTEMPTS:
+                nb_attempts += 1
                 time.sleep(SLEEP_TIME_FOR_REQUEST)
+
                 response = requests.get(api_url)
                 if response.ok == True:
-                    break
+                    try:
+                        jsondata = response.json()
+                        # Transform data
+                        jsondata = self._transform_api(
+                        jsondata,
+                        region['Place'],
+                        now)
+                        # Store data
+                        data.append(jsondata)
+                        break
+                    except: 
+                        continue
+            
+            # Stop and wait for next api call
+            if nb_attempts == MAX_ATTEMPTS:
+                return False
 
-            # Transform data
-            jsondata = response.json()
-            jsondata = self._transform_api(
-                jsondata,
-                region['_id'],
-                now
-            )
+        # Nothing was crawled
+        if len(data) == 0:
+            return False
 
-            # Update
-            self._query_func(collection=collection_to_update,
-                             jsondata=jsondata, region=region)
+        # Update data
+        self._query_func(collname=collname,
+                         data=data, region=region)
+
+        return True
 
 
 class UpdaterRealtime(Updater):
@@ -105,25 +126,24 @@ class UpdaterRealtime(Updater):
     def __init__(self, connection_string: str, dbname: str):
         super().__init__(connection_string, dbname)
 
-    def _transform_api(self, jsondata: dict, region_name: str, modified_time: str):
-        '''
-        This function will convert raw json data to a formatted one 
-        '''
-        return {
-            'Time': modified_time,
-            'Temperature': round(jsondata['main']['temp'] - 272.15, 0),
-            'Wind': jsondata['wind']['speed'],
-            'Humidity': jsondata['main']['humidity'],
-            'Pressure': jsondata['main']['pressure'],
-            '_id': region_name
-        }
-
-    def _query_func(self, collection, **kwargs):
-        collection.find_one_and_update(
-            {'_id': kwargs['region']['_id']},
-            {'$set': kwargs['jsondata']},
-            upsert=True,
-        )
+    def _query_func(self, collname, **kwargs):
+        # Create index if the collection does not exists
+        create_index = False
+        if collname not in self._db.list_collection_names():
+            create_index = True
+        
+        # Update
+        collection = self._db.get_collection(collname)
+        for data in kwargs['data']:
+            collection.find_one_and_update(
+                {'Place': kwargs['region']['Place']},
+                {'$set': data},
+                upsert=True,
+            )
+        
+        # Create index
+        if create_index == True:
+            collection.create_index('Place')
 
 
 class UpdaterInterval(Updater):
@@ -134,8 +154,9 @@ class UpdaterInterval(Updater):
     def __init__(self, connection_string: str, dbname: str):
         super().__init__(connection_string, dbname)
 
-    def _query_func(self, collection, **kwargs):
-        return collection.insert_one(kwargs['jsondata'])
+    def _query_func(self, collname, **kwargs):
+        collection = self._db.get_collection(collname)
+        return collection.insert_many(kwargs['data'])
 
 
 class Job(th.Thread):
@@ -183,19 +204,13 @@ def interval_runner(worker, interval, **kwargs):
     '''Only start at minute 0 or 30'''
     cur_min, cur_sec = datetime.now().strftime(r'%M-%S').split('-')
     if (cur_min == '00' or cur_min == '30') and int(cur_sec) <= 0.5:
-        # Fix time
         worker(kwargs['collname'])
 
 
 def realtime_runner(worker, interval, **kwargs):
     '''Collect data, keep the interval accuracy'''
-    cur_sec = datetime.now().strftime(r'%S')
-    if int(cur_sec) <= 0.5:
-        start = time.time()
-        worker(kwargs['collname'])
-        end = time.time()
-        run_time = round(end - start, 0)
-        time.sleep(interval - run_time)
+    worker(kwargs['collname'])
+    time.sleep(interval)
 
 
 if __name__ == '__main__':
@@ -219,7 +234,7 @@ if __name__ == '__main__':
             'realtime',
             realtime_object.update,
             realtime_runner,
-            120, # Change this to change the time between api calls for real time
+            300, # Change this to change the time between api calls for real time
             collname='realtime_data'
         )
 
