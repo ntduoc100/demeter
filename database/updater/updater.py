@@ -127,23 +127,14 @@ class UpdaterRealtime(Updater):
         super().__init__(connection_string, dbname)
 
     def _query_func(self, collname, **kwargs):
-        # Create index if the collection does not exists
-        create_index = False
-        if collname not in self._db.list_collection_names():
-            create_index = True
-        
-        # Update
+        '''
+        Description:
+        - Drop collection, create and re-create indices
+        '''
+        self._db.drop_collection(collname)
         collection = self._db.get_collection(collname)
-        for data in kwargs['data']:
-            collection.find_one_and_update(
-                {'Place': kwargs['region']['Place']},
-                {'$set': data},
-                upsert=True,
-            )
-        
-        # Create index
-        if create_index == True:
-            collection.create_index('Place')
+        collection.insert_many(kwargs['data'])
+        collection.create_index('Place')
 
 
 class UpdaterInterval(Updater):
