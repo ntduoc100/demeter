@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 class WeatherDataUploading:
     def __init__(self):
-        self.db = None
+        self._db = None
 
     def connect(self, connection_string: str, dbname: str):
         '''
