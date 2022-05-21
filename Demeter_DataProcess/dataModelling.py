@@ -7,6 +7,12 @@ from argparse import ArgumentParser
 
 
 class WeatherDataPredicting:
+    '''
+    Description:
+    - This class get data from mongoDB server, then apply it into auto_arima model
+    to find the best parameter. Then, parameter is pushing to server and wait for
+    predicting phase.
+    '''
     def __init__(self):
         self._db = None
 
