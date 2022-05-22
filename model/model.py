@@ -5,6 +5,7 @@ from keras.layers import LSTM
 from keras.layers import Dense
 from keras.layers import RepeatVector
 from keras.layers import TimeDistributed
+from keras.layers import Dropout
 from tensorflow import keras
 import pandas as pd
 import pymongo
@@ -20,9 +21,9 @@ from datetime import datetime, timedelta
 SCs = dict()
 
 # Tuning variables
-N_STEPS_IN, N_STEPS_OUT, N_STEPS = 1440, 366, 6
+N_STEPS_IN, N_STEPS_OUT, N_STEPS = 1440, 336, 6
 LEARNING_RATE = 0.001
-EPOCHS = 20
+EPOCHS = 2
 N_FEATURES = 4
 
 class Job(th.Thread):
@@ -102,8 +103,7 @@ def preprocess(data: list):
     if df['Time'].max().minute == '30':
         df.drop([df.index[-1]])
 
-    # Fill nan to not interfere with the timeline
-    df.fillna(df.mean())
+    df = df.dropna()
 
     df = df.drop(columns='Time')
     df = df.reset_index(drop=True)
@@ -149,14 +149,15 @@ def fit_lstm(X, y, model_name):
     - Trained model
     '''
     # Check for model existence
-    if os.path.exists('model/' + model_name):
-        model = keras.models.load_model('model/' + model_name)
+    if os.path.exists('models/' + model_name):
+        model = keras.models.load_model('models/' + model_name)
 
     else:
         model = Sequential()
         model.add(LSTM(300, activation='tanh', input_shape=(
             int(N_STEPS_IN/N_STEPS), N_FEATURES)))
         model.add(RepeatVector(int(N_STEPS_OUT/N_STEPS)))
+        model.add(Dropout(0.2))
         model.add(LSTM(300, activation='tanh', return_sequences=True))
         model.add(TimeDistributed(Dense(N_FEATURES)))
         model.compile(optimizer=keras.optimizers.Adam(
@@ -165,8 +166,8 @@ def fit_lstm(X, y, model_name):
     # fit model
     model.fit(X, y, epochs=EPOCHS, verbose=True)
 
-    shutil.rmtree('model/' + model_name, ignore_errors=True)
-    model.save('model/' + model_name)
+    shutil.rmtree('models/' + model_name, ignore_errors=True)
+    model.save('models/' + model_name)
 
     return model
 
@@ -193,9 +194,10 @@ def train_model(places, collname, db):
     # Train model for each place
     for loc in places:
         have_model = False
-
+        print(loc)
         # Check if model exists
-        if len(os.listdir('model')) == 0:
+        model_name = loc.replace(' ','_')
+        if os.path.exists('models/' + model_name):
             have_model = True
 
         if have_model == False:
@@ -212,25 +214,27 @@ def train_model(places, collname, db):
                 }, {'_id': False, 'Place': False})
         else:
             # Model existed train: last month
-            this_month = datetime.now().month
+            this_month = datetime.now()
+            last_month = this_month - relativedelta(months=1)
+
             cursor = collection.find({'$and': 
             [
                 {'$or':[
-                    {'Time':  {'$regex': f'2022-{this_month - 1}.+'}},
-                    {'Time': {'$regex': f'2022-{this_month}.+'}}
+                    {'Time':  {'$regex': f'2022-{last_month.strftime("%m")}.+'}},
+                    {'Time': {'$regex': f'2022-{this_month.strftime("%m")}.+'}}
                     ]
                 }, 
-                {'Place': loc}
+                {'Place': 'Ho Chi Minh city'}
             ]
-                }, {'_id': False, 'Place': False})
+            }, {'_id': False, 'Place': False})
 
         # Prepare data
         data = [i for i in cursor]
-        if len(data) < 1440:
+        if len(data) < N_STEPS_IN + N_STEPS_OUT:
             continue
 
         if have_model == True:
-            data = data[-1440:, :]
+            data = data[-N_STEPS_IN - N_STEPS_OUT:]
         features, sc = preprocess(data)
 
         # Store normalizer to denormalize later
@@ -243,9 +247,6 @@ def train_model(places, collname, db):
         model = fit_lstm(X, y, model_name=loc.replace(' ', '_'))
 
 
-        ## Test
-        break
-
 
 def predictor(places, collname, db):
     
@@ -255,7 +256,7 @@ def predictor(places, collname, db):
     for loc in places:
         have_model = False
         model_name = loc.replace(' ','_')
-        if os.path.exists('model/' + model_name):
+        if os.path.exists('models/' + model_name):
             have_model = True
         else:
             continue
@@ -275,13 +276,14 @@ def predictor(places, collname, db):
             }, {'_id': False, 'Place': False})
 
         data = [i for i in cursor]
-        features, sc = preprocess(data)
         
-        model = keras.models.load_model('model/' + model_name)
+        features, SCs[loc] = preprocess(data)
+        
+        model = keras.models.load_model('models/' + model_name)
         res = model.predict(features[-N_STEPS_IN::N_STEPS].reshape(-1, int(N_STEPS_IN/N_STEPS), N_FEATURES))
 
         
-        preds = sc.inverse_transform(res[0])
+        preds = SCs[loc].inverse_transform(res[0])
         preds = pd.DataFrame(np.round(preds, 0)).astype('int16')
         preds.columns = ['Temperature', 'Wind', 'Humidity', 'Pressure']
         
@@ -292,7 +294,7 @@ def predictor(places, collname, db):
         time_col = []
         for _ in range(len(res)):
             time_col = latest_time + timedelta(hours=3)
-            latest_time += 3
+            latest_time += timedelta(hours=3)
         preds['Time']  = time_col
 
         preds.to_csv(model_name)
