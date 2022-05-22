@@ -1,9 +1,10 @@
 import pymongo
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from argparse import ArgumentParser
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import numpy as np
+import time
 
 
 class WeatherPrediction:
@@ -85,6 +86,15 @@ class WeatherPrediction:
                 predictList.append(jsonformat)
             predictlDataCollection.insert_many(predictList)
 
+    def RemoveOldRecords(self, dataCollection: str):
+        '''
+        Description:
+        - Remove old predicted records 
+        '''
+        collection = self._db.get_collection(dataCollection)
+        now = (datetime.utcnow() + timedelta(hours=7)).strftime("%Y-%m-%dT%H:%M:%S")
+        collection.delete_many({'Time':{'$lt': now}})
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(description= "Uploading parameter for prediction model")
@@ -119,8 +129,13 @@ if __name__ == '__main__':
     while True:
         now = datetime.now()
         if now.hour in np.arange(0, 22, 3) and now.minute == 0:
-            weatherObject.getData(collectionName,coefficientName)
-            weatherObject.predictAndSave(places, predictName)
+            break
+
+    while True:
+        weatherObject.getData(collectionName,coefficientName)
+        weatherObject.predictAndSave(places, predictName)
+        weatherObject.RemoveOldRecords(collectionName)
+        time.sleep(3600)
 
     # weatherObject.getData(collectionName,coefficientName)
     # weatherObject.predictAndSave(places, predictName)
