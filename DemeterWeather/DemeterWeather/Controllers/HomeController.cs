@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DemeterProject.Data;
+using System.Text.Encodings.Web;
 
 namespace DemeterProject.Controllers
 {
@@ -22,22 +23,24 @@ namespace DemeterProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string CountryName, string CountryID)
-        {
-            ViewBag.Message = "Country Name: " + CountryName + "Country ID: " + CountryID;
-            return View();
-        }
-
-        [HttpPost]
-        public JsonResult CountryList(string prefix)
+        public JsonResult LocationList(string prefix)
         {
             List<LocationList> list = dbop.LocationGet(prefix);
             return Json(list);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public string GetLocation(string lat, string lon)
+        {
+            var res = dbop.CalculateLocation(lat, lon);
+            return res;
         }
 
         public async Task<IActionResult> About()

@@ -2,12 +2,11 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-
 var x = document.getElementById("location");
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(sendPosition);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -18,17 +17,45 @@ function showPosition(position) {
         " Longitude: " + position.coords.longitude;
 }
 
-
 function sendPosition(position) {
     var lat = position.coords.latitude;
-    var lon = position.coords.longtitude;
+    var lon = position.coords.longitude;
     $.ajax({
-        type: "GET",
-        url: "/Home/Index?lat=" + lat,
-        success: function (object) {
-            console.log(object);
+        type: "POST",
+        url: '/Home/GetLocation/',
+        data: { lat: lat, lon: lon},
+        success: function (result) {
+            x.innerHTML = result;
+        },
+        error: function () {
+            alert('Failed to receive the Location');
+            console.log('Failed ');
         }
     })
 }
-window.onload = getLocation();
 
+function clickLocation() {
+    var str = x.innerHTML.split(' ');
+    var strNew = "";
+    str.forEach((value, index, array) => {
+        if (index == 0) {
+            strNew = value;
+        }
+        else {
+            strNew = strNew + '+' + value;
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: '/Locations/Index/',
+        data: { locationName: x.innerHTML },
+        success: function (result) {
+            window.open('https://localhost:44381/Locations?locationName=' + strNew);
+        },
+        error: function () {
+            alert('Failed to receive the Location');
+            console.log('Failed ');
+        }
+    })
+}
