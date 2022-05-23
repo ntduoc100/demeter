@@ -6,9 +6,19 @@
     <div class="item1" style="grid-area: 1/1/1/1">
         <div style="height: 50%; margin-bottom: 8px; background-image: url(https://thelivenagpur.com/wp-content/uploads/2020/02/cloudy.jpg); border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2); ">
             <div style="height: 20%; background-color: #367C60">
-                <p id="location" onload="getLocation()" style="color: white">@ViewData["LocationGPS"]</p>
+                <p id="location" onclick="clickLocation()" style="color: white; font-weight:bold; font-size:20px; text-align: center"></p>
             </div>
-            <p style="color: white">Weather Information here</p>
+            <div class="row" style="height: 65%; margin-left: 15px">
+                <div id="temperature" style="color: white; width: 30%; margin-right:25%; font-weight:bold; font-size:60px; text-align:center">29<sup>o</sup></div>
+                <div class="col" style="width: 15%; margin-top: 20px">
+                    <div id="wind" style="height:50%; font-weight:bold; color:white; font-size:15px">Wind</div>
+                    <div id="humidity" style="height:50%; font-weight:bold; color:white; font-size:15px">Humidity</div>
+                </div>
+                <div class="col" style="width: 15%; margin-top: 20px">
+                    <div id="pressure" style="height:50%; font-weight:bold; color:white; font-size:15px">Pressure</div>
+                    <div id="conclusion" style="height:50%; font-weight:bold; color:white; font-size:15px">Conclusion</div>
+                </div>
+            </div>
         </div>
         <div class="row" style="height: 50%; width: 100%; margin-left: 0px; background-color: aquamarine; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
             <div style="height: 95%; width: 19%; margin: 2px; margin-left: 7.5px; margin-top: 3px; background-color: beige"> day 1</div>
@@ -18,7 +28,7 @@
             <div style="height: 95%; width: 19%; margin: 2px; margin-top: 3px; background-color: beige"> day 5</div>
         </div>
     </div>
-    <div class="item2" style="grid-area: 1/2/5/4; width: 100%">
+    <div class="item2" style="grid-area: 1/2/5/3; width: 100%">
         <iframe style="background: #FFFFFF; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2); width:100%; height:100%" src="https://charts.mongodb.com/charts-demeter-bzxtp/embed/charts?id=628313c5-b619-438f-83cb-abc4d0becf2e&maxDataAge=3600&theme=light&autoRefresh=true"></iframe>
     </div>
     <div class="item3" style="grid-area: 2/1/5/1; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);  width: 100%; background-color: aquamarine">Chart here</div>

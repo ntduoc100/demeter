@@ -16,7 +16,7 @@
             $("#txtCountry").autocomplete({
                 source: function(request, response) {
                     $.ajax({
-                        url: '/Home/CountryList/',
+                        url: '/Home/LocationList/',
                         data: { "prefix": request.term },
                         type: "POST",
                         success: function(data) {
@@ -36,7 +36,7 @@
         });
     </script>
 </head>
-<body style="background-color: #F5FAF7">
+<body onload="getLocation()" style="background-color: #F5FAF7">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid" style="margin-left: 100px; width: 90%">
@@ -51,7 +51,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="WeatherForecast" asp-action="Index">WeatherForecast</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
                     </ul>
                     <form style="width: 30%" asp-area="" asp-controller="Locations" asp-action="Index" method="get">
@@ -66,7 +66,6 @@
             @RenderBody()
         </main>
     </div>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
