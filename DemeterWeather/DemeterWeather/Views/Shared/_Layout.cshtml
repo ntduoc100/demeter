@@ -23,9 +23,15 @@
                             response($.map(data, function(item) {
                                 return item;
                             }))
+                        },
+                        error: function(reposnse) {
+                            alert(reposnse.responseText);
+                        },
+                        failure: function(reposnse) {
+                            alert(reposnse.reposnseText);
                         }
                     });
-                }
+                },
             });
         });
     </script>
@@ -45,10 +51,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="WeatherForecast" asp-action="Index">WeatherForecast</a>
                         </li>
                     </ul>
-                    <form style="width: 50%" asp-area="" asp-controller="Locations" asp-action="Index" method="get">
+                    <form style="width: 30%" asp-area="" asp-controller="Locations" asp-action="Index" method="get">
                         <input class="form-control col-lg-12" type="text" id="txtCountry" name="locationName" placeholder="Search any location..." value="@ViewData["Location"]" />
                     </form>
                 </div>

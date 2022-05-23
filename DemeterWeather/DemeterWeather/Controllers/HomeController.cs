@@ -12,7 +12,7 @@ namespace DemeterProject.Controllers
 {
     public class HomeController : Controller
     {
-        db dbop = new db();
+        Db dbop = new Db();
 
         private readonly ILogger<HomeController> _logger;
 
