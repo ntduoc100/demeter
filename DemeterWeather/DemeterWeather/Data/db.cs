@@ -36,7 +36,6 @@ namespace DemeterProject.Data
             var name = string.Empty;
             foreach (var item in collection.Find(s => s.Place != " ").ToList())
             {
-                //if (Math.Sqrt())
                 var x = Math.Abs(item.Coordinate[1] - double.Parse(lat));
                 var y = Math.Abs(item.Coordinate[0] - double.Parse(lon));
                 var res = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
@@ -47,6 +46,25 @@ namespace DemeterProject.Data
                 }
             }
             return name;
+        }
+
+        public ForecastList GetWeatherForecast(string lat, string lon)
+        {
+            ForecastList forecast = new ForecastList();
+            var city = CalculateLocation(lat, lon);
+            var collection = database.Realtime;
+            foreach (var item in collection.Find(s => s.Place == city).ToList())
+            {
+                forecast.Id = item.Id.ToString();
+                forecast.Temperature = item.Temperature.ToString();
+                forecast.Time = item.Time.ToString();
+                forecast.Wind = item.Wind.ToString();
+                forecast.Humidity= item.Humidity.ToString();
+                forecast.Pressure= item.Pressure.ToString();
+                forecast.Wind = item.Wind.ToString();
+                forecast.Place = item.Place.ToString();
+            }
+            return forecast;
         }
     }
 }
