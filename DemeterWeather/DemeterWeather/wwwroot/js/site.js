@@ -3,6 +3,11 @@
 
 // Write your JavaScript code.
 var x = document.getElementById("location");
+var temp = document.getElementById("temperature");
+var wind = document.getElementById("wind"); 
+var humidity = document.getElementById("humidity");
+var pressure = document.getElementById("pressure");
+var time = document.getElementById("time");
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -22,10 +27,18 @@ function sendPosition(position) {
     var lon = position.coords.longitude;
     $.ajax({
         type: "POST",
-        url: '/Home/GetLocation/',
+        url: '/Home/GetRealtime/',
         data: { lat: lat, lon: lon},
         success: function (result) {
-            x.innerHTML = result;
+            let myString = JSON.stringify(result);
+            var stringify = JSON.parse(myString);
+            let superscipt = "o";
+            x.innerHTML = stringify['place']
+            temp.innerHTML = stringify['temperature'] + superscipt.sup();
+            wind.innerHTML = 'Wind: ' + stringify['wind'];
+            humidity.innerHTML = 'Humidity: ' + stringify['humidity'];
+            pressure.innerHTML = 'Pressure: ' + stringify['pressure'];
+            time.innerHTML = 'Time: ' + stringify['time'];
         },
         error: function () {
             alert('Failed to receive the Location');
@@ -33,6 +46,8 @@ function sendPosition(position) {
         }
     })
 }
+
+
 
 function clickLocation() {
     var str = x.innerHTML.split(' ');
