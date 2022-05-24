@@ -1834,7 +1834,7 @@
    */
 
   function getBordersSize(styles, axis) {
-    var sideA = axis === 'x' ? 'Left' : 'Top';
+    var sideA = axis === 'place' ? 'Left' : 'Top';
     var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
     return parseFloat(styles['border' + sideA + 'Width'], 10) + parseFloat(styles['border' + sideB + 'Width'], 10);
@@ -1972,7 +1972,7 @@
     // we make this check conditional for performance reasons
     if (horizScrollbar || vertScrollbar) {
       var styles = getStyleComputedProperty(element);
-      horizScrollbar -= getBordersSize(styles, 'x');
+      horizScrollbar -= getBordersSize(styles, 'place');
       vertScrollbar -= getBordersSize(styles, 'y');
 
       result.width -= horizScrollbar;
@@ -2493,7 +2493,7 @@
 
     // touch DOM only if `applyStyle` modifier is enabled
     if (isModifierEnabled(this.modifiers, 'applyStyle')) {
-      this.popper.removeAttribute('x-placement');
+      this.popper.removeAttribute('place-placement');
       this.popper.style.position = '';
       this.popper.style.top = '';
       this.popper.style.left = '';
@@ -2699,7 +2699,7 @@
     // and refer to originalPlacement to know the original value
     var placement = computeAutoPlacement(options.placement, referenceOffsets, popper, reference, options.modifiers.flip.boundariesElement, options.modifiers.flip.padding);
 
-    popper.setAttribute('x-placement', placement);
+    popper.setAttribute('place-placement', placement);
 
     // Apply `position` to popper before anything else because
     // without the position applied we can't guarantee correct computations
@@ -2846,7 +2846,7 @@
 
     // Attributes
     var attributes = {
-      'x-placement': data.placement
+      'place-placement': data.placement
     };
 
     // Update `data` attributes, styles and arrowStyles
@@ -3464,7 +3464,7 @@
       }
 
       data.hide = true;
-      data.attributes['x-out-of-boundaries'] = '';
+      data.attributes['place-out-of-boundaries'] = '';
     } else {
       // Avoid unnecessary DOM access if visibility hasn't changed
       if (data.hide === false) {
@@ -3472,7 +3472,7 @@
       }
 
       data.hide = false;
-      data.attributes['x-out-of-boundaries'] = false;
+      data.attributes['place-out-of-boundaries'] = false;
     }
 
     return data;
@@ -3675,7 +3675,7 @@
       /** @prop {ModifierFn} */
       fn: arrow,
       /** @prop {String|HTMLElement} element='[x-arrow]' - Selector or node used as arrow */
-      element: '[x-arrow]'
+      element: '[place-arrow]'
     },
 
     /**
@@ -5935,7 +5935,7 @@
       var tip = this.getTipElement();
       var initConfigAnimation = this.config.animation;
 
-      if (tip.getAttribute('x-placement') !== null) {
+      if (tip.getAttribute('place-placement') !== null) {
         return;
       }
 

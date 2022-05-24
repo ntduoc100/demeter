@@ -14,7 +14,7 @@ namespace DemeterProject.Data
     {
         MongoDbContext database = new MongoDbContext();
 
-        public List<LocationList> LocationGet(string prefix)
+        public List<LocationList> GetListLocation(string prefix)
         {
             List<LocationList> list = new List<LocationList>();
             var collection = database.Region;
@@ -22,9 +22,9 @@ namespace DemeterProject.Data
             {
                 list.Add(new LocationList
                 {
-                    label = item.Place.ToString(),
-                    val = item.PlaceId.ToString(),
-                });;
+                    Label = item.Place.ToString(),
+                    Val = item.PlaceId.ToString(),
+                });
             }
             return list;
         }
@@ -48,10 +48,9 @@ namespace DemeterProject.Data
             return name;
         }
 
-        public ForecastList GetWeatherForecast(string lat, string lon)
+        public ForecastList getForecastByLocation(string city)
         {
             ForecastList forecast = new ForecastList();
-            var city = CalculateLocation(lat, lon);
             var collection = database.Realtime;
             foreach (var item in collection.Find(s => s.Place == city).ToList())
             {
@@ -59,12 +58,56 @@ namespace DemeterProject.Data
                 forecast.Temperature = item.Temperature.ToString();
                 forecast.Time = item.Time.ToString();
                 forecast.Wind = item.Wind.ToString();
-                forecast.Humidity= item.Humidity.ToString();
-                forecast.Pressure= item.Pressure.ToString();
+                forecast.Humidity = item.Humidity.ToString();
+                forecast.Pressure = item.Pressure.ToString();
                 forecast.Wind = item.Wind.ToString();
                 forecast.Place = item.Place.ToString();
             }
             return forecast;
+        }
+
+        public ForecastList GetWeatherForecast(string lat, string lon)
+        {
+            var city = CalculateLocation(lat, lon);
+            ForecastList forecast = getForecastByLocation(city);
+            return forecast;
+        }
+
+        public List<PredictList> GetPredictForecast(string lat, string lon)
+        {
+            List<PredictList> predict = new List<PredictList>();
+            var city = CalculateLocation(lat, lon);
+            var collection = database.Predict;
+            var today = DateTime.Now;
+            for (var i = 1; i <= 5; i++)
+            {
+                var predictDate = today.AddDays(i);
+                var sumTemp = 0.0;
+                var countTime = 0.0;
+                var minTemp = 100.0;
+                var maxTemp = 0.0;
+                foreach (var item in collection.Find(s => s.Place == city & s.Time.Contains(predictDate.ToString("yyyy-MM-dd"))).ToList())
+                {
+                    sumTemp += item.Temperature;
+                    countTime += 1;
+                    if (minTemp > item.Temperature)
+                    {
+                        minTemp = item.Temperature;
+                    }
+                    else if (maxTemp < item.Temperature)
+                    {
+                        maxTemp = item.Temperature;
+                    }
+                }
+                predict.Add(new PredictList
+                {
+                    Date = predictDate.ToString("yyyy-MM-dd"),
+                    MeanTemperature = (sumTemp / countTime).ToString(),
+                    LowerBoundTemperature = minTemp.ToString(),
+                    UpperBoundTemperature = maxTemp.ToString()
+                });
+            }
+            return predict;
         }
     }
 }
