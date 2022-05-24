@@ -25,14 +25,21 @@ namespace DemeterProject.Controllers
         [HttpPost]
         public JsonResult LocationList(string prefix)
         {
-            List<LocationList> list = dbop.LocationGet(prefix);
+            List<LocationList> list = dbop.GetListLocation(prefix);
             return Json(list);
         }
 
         [HttpPost]
         public JsonResult GetRealtime(string lat, string lon)
         {
-            var res = dbop.GetWeatherForecast(lat, lon);
+            ForecastList res = dbop.GetWeatherForecast(lat, lon);
+            return Json(res);
+        }
+
+        [HttpPost]
+        public JsonResult GetPredict(string lat, string lon)
+        {
+            List<PredictList> res = dbop.GetPredictForecast(lat, lon);
             return Json(res);
         }
 
@@ -45,6 +52,7 @@ namespace DemeterProject.Controllers
         public async Task<IActionResult> About()
         {
             return View();
+
         }
 
 
