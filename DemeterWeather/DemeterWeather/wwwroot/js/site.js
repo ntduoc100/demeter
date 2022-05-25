@@ -8,6 +8,7 @@ var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var pressure = document.getElementById("pressure");
 var time = document.getElementById("time");
+var background = document.getElementById("background");
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -36,6 +37,17 @@ function sendPosition(position) {
             humidity.innerHTML = 'Humidity: ' + stringify['humidity'] +'%';
             pressure.innerHTML = 'Pressure: ' + stringify['pressure'] + ' hPa';
             time.innerHTML = 'Time: ' + stringify['time'].split('T')[0] + ' ' + stringify['time'].split('T')[1];
+            if (parseInt(stringify['temperature']) < 30) {
+                background.style.backgroundImage = "url(https://live.staticflickr.com/2869/9432775833_d5f673978d_b.jpg)";
+                temp.style.color = "white";
+                wind.style.color = "white";
+                humidity.style.color = "white";
+                pressure.style.color = "white";
+                time.style.color = "white";
+            }
+            else {
+                background.style.backgroundImage = "url(https://www.meteorologiaenred.com/wp-content/uploads/2021/01/nubosidad.jpg)";
+            }
         },
         error: function () {
             alert('Failed to receive the Location');
