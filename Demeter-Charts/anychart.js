@@ -1,28 +1,27 @@
 anychart.onDocumentReady(function () {
 
-    var predictData = getData()
-        var predictData = $.ajax(
-            {
-                url: "",
-                type: "GET",
-                data: {},
-            }
-        ).done(function (json) {
-            var max = json.data.length;
-            var data = [];
-            for (let i = 0; i < max; i++) {
-                var t = json.data[i];
-                data[i] = {
-                    "Time": t["Time"],
-                    "Temperature": t["Temperature"],
-                    "Wind": t["Wind"],
-                    "Humidity": t["Humidity"],
-                    "Pressure": t["Pressure"],
-                };
+    // var predictData = getData()
+    // var predictData = $.ajax(
+    //     {
+    //         url: "",
+    //         type: "GET",
+    //         data: {},
+    //     }
+    // ).done(function (json) {
+    //     var max = json.data.length;
+    //     var data = [];
+    //     for (let i = 0; i < max; i++) {
+    //         var t = json.data[i];
+    //         data[i] = {
+    //             "Time": t["Time"],
+    //             "Temperature": t["Temperature"],
+    //             "Wind": t["Wind"],
+    //             "Humidity": t["Humidity"],
+    //             "Pressure": t["Pressure"],
+    //         };
 
-            }
-        })
-    }
+    //     }
+    // })
 
     var predictData = [
         {
@@ -105,15 +104,15 @@ anychart.onDocumentReady(function () {
             sortedWeatherData[i].Wind
         ]
     }
-    // create line chart
-    var chart = anychart.line();
+    // create area chart
+    var chart = anychart.area();
 
     // tooltip
-
     var tooltip = chart.tooltip()
     tooltip.format(function (e) {
         // return newData[1].indexOf(this.value)
-        return "Humidity: " + newData[this.index][2]
+        return "Temperature: " + newData[this.index][1]
+            + "\nHumidity: " + newData[this.index][2]
             + "\nPressure: " + newData[this.index][3]
             + "\nWind: " + newData[this.index][4]
     })
@@ -130,17 +129,13 @@ anychart.onDocumentReady(function () {
     chart.crosshair(true);
 
     // set chart title text settings
-    chart.title(predictData[0].Time.slice(0, 10));
+    chart.title('Ngày ' + predictData[0].Time.slice(8, 10)
+        + ' Tháng ' + predictData[0].Time.slice(5, 7)
+        + ' Năm ' + predictData[0].Time.slice(0, 4)
+    );
 
-    // set y axis title
-    chart.yAxis().title('Temperature');
-
-    // create logarithmic scale
-    // var logScale = anychart.scales.log();
-    // logScale.minimum(1).maximum(45000);
-
-    // set scale for the chart, this scale will be used in all scale dependent entries such axes, grids, etc
-    // chart.yScale(logScale);
+    // remove y axis
+    chart.yAxis().enabled(false);
 
     // create data set on our data,also we can pud data directly to series
     var dataSet = anychart.data.set(newData);
