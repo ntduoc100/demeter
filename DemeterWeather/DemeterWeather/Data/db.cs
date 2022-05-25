@@ -60,7 +60,6 @@ namespace DemeterProject.Data
                 forecast.Wind = item.Wind.ToString();
                 forecast.Humidity = item.Humidity.ToString();
                 forecast.Pressure = item.Pressure.ToString();
-                forecast.Wind = item.Wind.ToString();
                 forecast.Place = item.Place.ToString();
             }
             return forecast;
@@ -109,5 +108,25 @@ namespace DemeterProject.Data
             }
             return predict;
         }
-    }
+
+        public List<ForecastList> GetTimelyPredictForecast(string city)
+        {
+            List<ForecastList> predict = new List<ForecastList>();
+            var collection = database.Predict;
+            foreach(var item in collection.Find(s => s.Place == city).ToList())
+            {
+                predict.Add(new ForecastList
+                {
+                    Id = item.Id.ToString(),
+                    Temperature = item.Temperature.ToString(),
+                    Time = item.Time.ToString(),
+                    Wind = item.Wind.ToString(),
+                    Humidity = item.Humidity.ToString(),
+                    Pressure = item.Pressure.ToString(),
+                    Place = item.Place.ToString(),
+                });
+            }
+            return predict;
+        }
+     }
 }
