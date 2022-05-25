@@ -37,7 +37,7 @@ class Updater:
         '''
         return {
             'Time': modified_time,
-            'Temperature': round(jsondata['main']['temp'] - 272.15, 0),
+            'Temperature': round(jsondata['main']['temp'] - 272.15, 0), # Kevil to Celsius
             'Wind': jsondata['wind']['speed'],
             'Humidity': jsondata['main']['humidity'],
             'Pressure': jsondata['main']['pressure'],
@@ -106,7 +106,7 @@ class Updater:
             if nb_attempts == MAX_ATTEMPTS:
                 return False
 
-        # Nothing was crawled
+        # No data was crawled
         if len(data) == 0:
             return False
 

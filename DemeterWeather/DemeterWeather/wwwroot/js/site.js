@@ -21,7 +21,7 @@ function getLocation() {
 
 
 function sendPosition(position) {
-    var lat = position.coords.latitude;
+    var lat = position.coords.latitude;  
     var lon = position.coords.longitude;
     $.ajax({
         type: "POST",

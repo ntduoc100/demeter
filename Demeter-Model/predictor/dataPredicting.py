@@ -134,7 +134,7 @@ if __name__ == '__main__':
     while True:
         weatherObject.getData(collectionName,coefficientName)
         weatherObject.predictAndSave(places, predictName)
-        weatherObject.RemoveOldRecords(collectionName)
+        weatherObject.RemoveOldRecords(predictName)
         time.sleep(3600)
 
     # weatherObject.getData(collectionName,coefficientName)
