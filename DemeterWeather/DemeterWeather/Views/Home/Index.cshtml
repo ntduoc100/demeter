@@ -48,8 +48,39 @@
             </div>
         </div>
     </div>
-    <div class="item2" style="grid-area: 1/2/5/3; width: 100%">
-        <iframe style="background: #FFFFFF; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2); width:100%; height:100%" src="https://charts.mongodb.com/charts-demeter-bzxtp/embed/charts?id=628313c5-b619-438f-83cb-abc4d0becf2e&maxDataAge=3600&theme=light&autoRefresh=true"></iframe>
+    <div id="container" class="item2" style="grid-area: 1/2/5/3; width: 100%">
+        <script>
+            $.ajax({
+                type: "POST",
+                url: '/Home/ChartInformationList/',
+                data: { filter: "Temperature" },
+                success: function(result) {
+                    let myString = JSON.stringify(result);
+                    var stringify = JSON.parse(myString);
+                    for (var i = 0; i < stringify.length; i++) {
+                        result.push({ "id": stringify[i]['id'], "value": parseInt(stringify[i]['value']) });
+                    }
+
+                    anychart.onDocumentReady(function() {
+                        var map = anychart.map();
+                        var dataSet = anychart.data.set(result);
+                        series = map.choropleth(dataSet);
+
+                        series.geoIdField('id');
+
+                        series.colorScale(anychart.scales.linearColor('#deebf7', '#3182bd'));
+                        series.hovered().fill('#addd8e');
+
+                        // https://cdn.anychart.com/#maps-collection
+                        map.geoData(anychart.maps['vietnam']);
+
+                        map.container('container');
+
+                        map.draw();
+                    });
+                }
+            });
+        </script>
     </div>
     <div class="item3" style="grid-area: 2/1/5/1; margin-top: 1%; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);  width: 100%; background-color: #E8E8CC">Chart here</div>
 </div>

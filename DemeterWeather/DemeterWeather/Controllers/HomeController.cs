@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DemeterProject.Data;
 using System.Text.Encodings.Web;
+using DemeterWeather.Models.JsonObjectFormat;
 
 namespace DemeterProject.Controllers
 {
@@ -27,6 +28,13 @@ namespace DemeterProject.Controllers
         {
             List<LocationList> list = dbop.GetListLocation(prefix);
             return Json(list);
+        }
+
+        [HttpPost]
+        public JsonResult ChartInformationList(string filter)
+        {
+            List<ChartInformationList> chartInformation = dbop.GetChartInformation(filter);
+            return Json(chartInformation);
         }
 
         [HttpPost]

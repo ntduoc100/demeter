@@ -101,7 +101,7 @@ function clickLocation() {
         url: '/Locations/Index/',
         data: { locationName: place.innerHTML },
         success: function (result) {
-            window.open('https://localhost:44381/Locations?locationName=' + strNew);
+            window.open('/Locations?locationName=' + strNew);
         },
         error: function () {
             alert('Failed to receive the Location');

@@ -10,7 +10,9 @@ namespace DemeterWeather.Models
         [BsonElement("Place")]
         public string Place { get; set; }
         [BsonElement("id")]
-        public int PlaceId { get; set; }
+        public int PlaceId { get;set; }
+        [BsonElement("place_id")]
+        public string ChartPlaceId { get; set; }
         [BsonElement("coordinate")]
         public double[] Coordinate { get; set; }
     }

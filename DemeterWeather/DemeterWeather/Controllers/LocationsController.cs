@@ -34,15 +34,22 @@ namespace DemeterWeather.Controllers
         {
             @ViewData["Location"] = locationName;
             SetHeaderWeather(locationName);
-            @ViewData["Image"] = "~/well.png";
             List<ForecastList> predict = dbop.GetTimelyPredictForecast(locationName);
             for (var i = 0; i < 8; i++)
             {
-                ViewData["Time" + i] = predict[i].Time.Split('T')[0] + ' ' + predict[i].Time.Split('T')[1];
+                @ViewData["Time" + i] = predict[i].Time.Split('T')[0] + ' ' + predict[i].Time.Split('T')[1];
                 @ViewData["Temp" + i] = predict[i].Temperature;
                 @ViewData["Wind" + i] = "Wind: " + predict[i].Wind + " m/s";
                 @ViewData["Humidity" + i] = "Humidity: " + predict[i].Humidity + "%";
                 @ViewData["Pressure" + i] = "Pressure: " + predict[i].Pressure + " hPa";
+                if (double.Parse(predict[i].Temperature) < 30.0)
+                {
+                    @ViewData["Image" + i] = "well.png";
+                }
+                else
+                {
+                    @ViewData["Image" + i] = "hot.png";
+                }
             }
             return View();
         }
