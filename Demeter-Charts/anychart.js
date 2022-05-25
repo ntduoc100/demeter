@@ -117,25 +117,29 @@ anychart.onDocumentReady(function () {
             + "\nWind: " + newData[this.index][4]
     })
 
+
     // set background
-    chart.background()
+    chart.background().fill("#284c5c")
     // set chart padding
     chart.padding([20, 20, 20, 20]);
 
     // turn on chart animation
     chart.animation(true);
 
-    // turn on the crosshair
-    chart.crosshair(true);
+    // turn off the crosshair
+    chart.crosshair(false);
 
     // set chart title text settings
-    chart.title('Ngày ' + predictData[0].Time.slice(8, 10)
-        + ' Tháng ' + predictData[0].Time.slice(5, 7)
-        + ' Năm ' + predictData[0].Time.slice(0, 4)
-    );
-
+    // var title = chart.title('Ngày ' + predictData[0].Time.slice(8, 10)
+    //     + ' Tháng ' + predictData[0].Time.slice(5, 7)
+    //     + ' Năm ' + predictData[0].Time.slice(0, 4)
+    // );
+    chart.title().enabled(false)
+    
+    
     // remove y axis
     chart.yAxis().enabled(false);
+    chart.xAxis().labels().fontColor('White')
 
     // create data set on our data,also we can pud data directly to series
     var dataSet = anychart.data.set(newData);
@@ -147,10 +151,10 @@ anychart.onDocumentReady(function () {
     var series;
 
     // setup first series
-    series = chart.splineArea(firstSeriesData);
+    series = chart.splineArea(firstSeriesData).fill(['#206F91','#86C7E2'], 90);
     series.name('Time');
     // enable series data labels
-    series.labels().enabled(true).anchor('top').padding(10);
+    series.labels().enabled(true).anchor('top').padding(10).fontColor('White');
     // enable series markers
     series.markers(true);
 
