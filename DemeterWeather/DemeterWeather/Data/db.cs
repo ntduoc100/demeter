@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using DemeterWeather.Data;
 using MongoDB.Driver;
 using System;
+using DemeterWeather.Models.JsonObjectFormat;
 
 namespace DemeterProject.Data
 
@@ -29,10 +30,66 @@ namespace DemeterProject.Data
             return list;
         }
 
+        public List<ChartInformationList> GetChartInformation(string filter)
+        {
+            List<ChartInformationList> chartInformation = new List<ChartInformationList>();
+            var regionCollection = database.Region;
+            var realtimeCollection = database.Realtime;
+            switch (filter)
+            {
+                case "Temperature":
+                    foreach (var item in regionCollection.Find(s => s.Place != "").ToList())
+                    {
+                        var temp = realtimeCollection.Find(s => s.Place == item.Place).FirstOrDefault();
+                        chartInformation.Add(new ChartInformationList
+                        {
+                            id = item.ChartPlaceId.ToString(),
+                            value = temp.Temperature.ToString()
+                        });
+                    }
+                    break;
+                case "Wind":
+                    foreach (var item in regionCollection.Find(s => s.Place != "").ToList())
+                    {
+                        var wind = realtimeCollection.Find(s => s.Place == item.Place).FirstOrDefault();
+                        chartInformation.Add(new ChartInformationList
+                        {
+                            id = item.ChartPlaceId.ToString(),
+                            value = wind.Wind.ToString()
+                        });
+                    }
+                    break;
+                case "Humidity":
+                    foreach (var item in regionCollection.Find(s => s.Place != "").ToList())
+                    {
+                        var humidity = realtimeCollection.Find(s => s.Place == item.Place).FirstOrDefault();
+                        chartInformation.Add(new ChartInformationList
+                        {
+                            id = item.ChartPlaceId.ToString(),
+                            value = humidity.Humidity.ToString()
+                        });
+                    }
+                    break;
+                case "Pressure":
+                    foreach (var item in regionCollection.Find(s => s.Place != "").ToList())
+                    {
+                        var pressure = realtimeCollection.Find(s => s.Place == item.Place).FirstOrDefault();
+                        chartInformation.Add(new ChartInformationList
+                        {
+                            id = item.ChartPlaceId.ToString(),
+                            value = pressure.Pressure.ToString()
+                        });
+                    }
+                    break;
+            }
+            return chartInformation;
+        }
+
+
         public string CalculateLocation(string lat, string lon)
         {
             var collection = database.Region;
-            var distance = 100000.0;
+            var distance = double.MaxValue;
             var name = string.Empty;
             foreach (var item in collection.Find(s => s.Place != " ").ToList())
             {
