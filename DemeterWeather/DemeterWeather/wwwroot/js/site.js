@@ -32,9 +32,9 @@ function sendPosition(position) {
             let superscipt = "o";
             place.innerHTML = stringify['place']
             temp.innerHTML = stringify['temperature'] + superscipt.sup() + 'C';
-            wind.innerHTML = 'Wind: ' + stringify['wind'];
-            humidity.innerHTML = 'Humidity: ' + stringify['humidity'];
-            pressure.innerHTML = 'Pressure: ' + stringify['pressure'];
+            wind.innerHTML = 'Wind: ' + stringify['wind'] + ' m/s';
+            humidity.innerHTML = 'Humidity: ' + stringify['humidity'] +'%';
+            pressure.innerHTML = 'Pressure: ' + stringify['pressure'] + ' hPa';
             time.innerHTML = 'Time: ' + stringify['time'].split('T')[0] + ' ' + stringify['time'].split('T')[1];
         },
         error: function () {
@@ -60,8 +60,8 @@ function getPredict(position) {
                 var mean = document.getElementById("mean" + (i + 1));
                 var range = document.getElementById("range" + (i + 1));
                 date.innerHTML = stringify[i]['date'];
-                mean.innerHTML = parseInt(stringify[i]['meanTemperature']) + superscipt.sup();;
-                range.innerHTML = stringify[i]['lowerBoundTemperature'] + ' - ' + stringify[i]['upperBoundTemperature'];
+                mean.innerHTML = parseInt(stringify[i]['meanTemperature']) + superscipt.sup() + 'C';
+                range.innerHTML = parseInt(stringify[i]['lowerBoundTemperature']) + superscipt.sup() + ' - ' + parseInt(stringify[i]['upperBoundTemperature']) + superscipt.sup();
             }
         },
         error: function () {
