@@ -19,6 +19,14 @@ namespace DemeterWeather.Controllers
             ViewData["Humidity"] = "Humidity: " + forecast.Humidity + "%";
             ViewData["Pressure"] = "Pressure: " + forecast.Pressure + " hPa";
             ViewData["Time"] = "Time: " + forecast.Time.Split('T')[0] + ' ' + forecast.Time.Split('T')[1];
+            if (int.Parse(forecast.Temperature) < 30)
+            {
+                @ViewData["Background"] = "url(https://img5.thuthuatphanmem.vn/uploads/2021/12/28/anh-bau-troi-may-den-u-am-tuyet-vong_022428259.jpg)";
+            }
+            else
+            {
+                @ViewData["Background"] = "url(https://arizonaoddities.com/wp-content/uploads/2012/06/Clouds.jpg)";
+            }
         }
 
         [HttpGet]
@@ -26,6 +34,7 @@ namespace DemeterWeather.Controllers
         {
             @ViewData["Location"] = locationName;
             SetHeaderWeather(locationName);
+            @ViewData["Image"] = "~/well.png";
             List<ForecastList> predict = dbop.GetTimelyPredictForecast(locationName);
             for (var i = 0; i < 8; i++)
             {
