@@ -109,3 +109,39 @@ function clickLocation() {
         }
     })
 }
+
+function update() {
+    var select = document.getElementById('filters');
+    var value = select.options[select.selectedIndex].value;
+    document.getElementById("container").innerHTML = "";
+    $.ajax({
+        type: "POST",
+        url: '/Home/ChartInformationList/',
+        data: { filter: value },
+        success: function (result) {
+            let myString = JSON.stringify(result);
+            var stringify = JSON.parse(myString);
+            for (var i = 0; i < stringify.length; i++) {
+                result.push({ "id": stringify[i]['id'], "value": parseInt(stringify[i]['value']) });
+            }
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+                var dataSet = anychart.data.set(result);
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+
+                series.colorScale(anychart.scales.linearColor('#deebf7', '#3182bd'));
+                series.hovered().fill('#addd8e');
+
+                // https://cdn.anychart.com/#maps-collection
+                map.geoData(anychart.maps['vietnam']);
+
+                map.container('container');
+
+                map.draw();
+            });
+        }
+    });
+}

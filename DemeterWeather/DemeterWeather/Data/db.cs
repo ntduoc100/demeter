@@ -30,6 +30,16 @@ namespace DemeterProject.Data
             return list;
         }
 
+        public bool CheckExistLocation(string locationName)
+        {
+            List<LocationList> list = new List<LocationList>();
+            var collection = database.Region;
+            var item = collection.Find(s => s.Place == locationName).FirstOrDefault();
+            if (item != null)
+                return true;
+            return false;
+        }
+
         public List<ChartInformationList> GetChartInformation(string filter)
         {
             List<ChartInformationList> chartInformation = new List<ChartInformationList>();
