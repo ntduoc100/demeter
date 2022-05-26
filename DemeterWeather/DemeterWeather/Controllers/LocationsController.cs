@@ -28,30 +28,41 @@ namespace DemeterWeather.Controllers
                 @ViewData["Background"] = "url(https://arizonaoddities.com/wp-content/uploads/2012/06/Clouds.jpg)";
             }
         }
+        public IActionResult Error()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Index(string locationName)
         {
-            @ViewData["Location"] = locationName;
-            SetHeaderWeather(locationName);
-            List<ForecastList> predict = dbop.GetTimelyPredictForecast(locationName);
-            for (var i = 0; i < 8; i++)
+            if (dbop.CheckExistLocation(locationName) == false)
             {
-                @ViewData["Time" + i] = predict[i].Time.Split('T')[0] + ' ' + predict[i].Time.Split('T')[1];
-                @ViewData["Temp" + i] = predict[i].Temperature;
-                @ViewData["Wind" + i] = "Wind: " + predict[i].Wind + " m/s";
-                @ViewData["Humidity" + i] = "Humidity: " + predict[i].Humidity + "%";
-                @ViewData["Pressure" + i] = "Pressure: " + predict[i].Pressure + " hPa";
-                if (double.Parse(predict[i].Temperature) < 30.0)
-                {
-                    @ViewData["Image" + i] = "well.png";
-                }
-                else
-                {
-                    @ViewData["Image" + i] = "hot.png";
-                }
+                return RedirectToAction("Error", "Locations");
             }
-            return View();
+            else
+            {
+                @ViewData["Location"] = locationName;
+                SetHeaderWeather(locationName);
+                List<ForecastList> predict = dbop.GetTimelyPredictForecast(locationName);
+                for (var i = 0; i < 8; i++)
+                {
+                    @ViewData["Time" + i] = predict[i].Time.Split('T')[0] + ' ' + predict[i].Time.Split('T')[1];
+                    @ViewData["Temp" + i] = predict[i].Temperature;
+                    @ViewData["Wind" + i] = "Wind: " + predict[i].Wind + " m/s";
+                    @ViewData["Humidity" + i] = "Humidity: " + predict[i].Humidity + "%";
+                    @ViewData["Pressure" + i] = "Pressure: " + predict[i].Pressure + " hPa";
+                    if (double.Parse(predict[i].Temperature) < 30.0)
+                    {
+                        @ViewData["Image" + i] = "well.png";
+                    }
+                    else
+                    {
+                        @ViewData["Image" + i] = "hot.png";
+                    }
+                }
+                return View();
+            }
         }
     }
 }
