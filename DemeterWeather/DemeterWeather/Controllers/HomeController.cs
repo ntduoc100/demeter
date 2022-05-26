@@ -33,8 +33,15 @@ namespace DemeterProject.Controllers
         [HttpPost]
         public JsonResult ChartInformationList(string filter)
         {
-            List<ChartInformationList> chartInformation = dbop.GetChartInformation(filter);
+            List<ChartInformationList> chartInformation = dbop.GetMapChartInformation(filter);
             return Json(chartInformation);
+        }
+
+        [HttpPost]
+        public JsonResult LineChartInformationList(string chartPlaceId)
+        {
+            List<LineChartInformationList> lines = dbop.GetLineChartInformation(chartPlaceId);
+            return Json(lines);
         }
 
         [HttpPost]

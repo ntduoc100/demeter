@@ -4,11 +4,12 @@
 // Write your JavaScript code.
 var place = document.getElementById("location");
 var temp = document.getElementById("temperature");
-var wind = document.getElementById("wind"); 
+var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var pressure = document.getElementById("pressure");
 var time = document.getElementById("time");
 var background = document.getElementById("background");
+var chartPlaceId;
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -34,7 +35,7 @@ function sendPosition(position) {
             place.innerHTML = stringify['place']
             temp.innerHTML = stringify['temperature'] + superscipt.sup() + 'C';
             wind.innerHTML = 'Wind: ' + stringify['wind'] + ' m/s';
-            humidity.innerHTML = 'Humidity: ' + stringify['humidity'] +'%';
+            humidity.innerHTML = 'Humidity: ' + stringify['humidity'] + '%';
             pressure.innerHTML = 'Pressure: ' + stringify['pressure'] + ' hPa';
             time.innerHTML = 'Time: ' + stringify['time'].split('T')[0] + ' ' + stringify['time'].split('T')[1];
             if (parseInt(stringify['temperature']) < 30) {
@@ -62,7 +63,7 @@ function getPredict(position) {
     $.ajax({
         type: "POST",
         url: '/Home/GetPredict/',
-        data: { lat: lat, lon: lon },               
+        data: { lat: lat, lon: lon },
         success: function (result) {
             let myString = JSON.stringify(result);
             var stringify = JSON.parse(myString);
@@ -136,11 +137,84 @@ function update() {
                 series.hovered().fill('#addd8e');
 
                 // https://cdn.anychart.com/#maps-collection
+                map.title("Realtime Map with " + value);
                 map.geoData(anychart.maps['vietnam']);
 
                 map.container('container');
 
                 map.draw();
+
+                map.listen("pointDblClick", function (e) {
+                    chartPlaceId = e.point.get("id");
+                });
+            });
+        }
+    });
+}
+
+function lineChart() {
+    document.getElementById("lineChart").innerHTML = "";
+    $.ajax({
+        type: "POST",
+        url: '/Home/LineChartInformationList/',
+        data: { chartPlaceId: chartPlaceId },
+        success: function (result) {
+            let myString = JSON.stringify(result);
+            var stringify = JSON.parse(myString);
+            anychart.onDocumentReady(function () {
+                var newData = []
+                for (let i = 0; i < stringify.length; i++) {
+                    newData[i] = [
+                        stringify[i].time.slice(11, 16),
+                        Number(stringify[i].temperature),
+                        Number(stringify[i].humidity),
+                        Number(stringify[i].pressure),
+                        Number(stringify[i].wind),
+                    ]
+                }
+
+                var mostRecentPredictedTime = Number(stringify[0]['time'].slice(11, 13))
+                for (let i = 0; i < mostRecentPredictedTime; i += 3) {
+                    var tmp_hour;
+                    if (i < 10) {
+                        tmp_hour = '0' + i + ':00'
+                    } else {
+                        tmp_hour = i + ':00'
+                    }
+                    newData.unshift([tmp_hour, 'N/A', 'N/A', 'N/A', 'N/A'])
+                }
+
+                var chart = anychart.area();
+
+                var tooltip = chart.tooltip()
+                tooltip.format(function (e) {
+                    return "Temperature: " + newData[this.index][1]
+                        + "\nHumidity: " + newData[this.index][2]
+                        + "\nPressure: " + newData[this.index][3]
+                        + "\nWind: " + newData[this.index][4]
+                })
+
+                chart.background()
+                chart.padding([20, 20, 20, 20]);
+                chart.animation(true);
+                chart.crosshair(false);
+                chart.title(stringify[0].place
+                    + ', Day ' + stringify[0].time.slice(8, 10)
+                    + ' Month ' + stringify[0].time.slice(5, 7)
+                    + ' Year ' + stringify[0].time.slice(0, 4));
+                chart.yAxis().enabled(true);
+                //var dataSet = anychart.data.set(newData);
+                var dataSet = anychart.data.set(newData.map(function (x) { return [x[0], x[1]] }));
+                //var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });
+                var firstSeriesData = dataSet;
+                var series;
+                series = chart.splineArea(firstSeriesData).fill("#5DF8FD");
+                series.name('Time');
+                series.labels().enabled(true).anchor('top').padding(10).fontSize('15');
+                series.markers(false);
+                chart.container('lineChart');
+
+                chart.draw();
             });
         }
     });

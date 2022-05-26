@@ -40,7 +40,7 @@ namespace DemeterProject.Data
             return false;
         }
 
-        public List<ChartInformationList> GetChartInformation(string filter)
+        public List<ChartInformationList> GetMapChartInformation(string filter)
         {
             List<ChartInformationList> chartInformation = new List<ChartInformationList>();
             var regionCollection = database.Region;
@@ -93,6 +93,27 @@ namespace DemeterProject.Data
                     break;
             }
             return chartInformation;
+        }
+
+        public List<LineChartInformationList> GetLineChartInformation(string chartplaceId)
+        {
+            List<LineChartInformationList> lines = new List<LineChartInformationList>();
+            var regionCollection = database.Region;
+            var predictCollection = database.Predict;
+            var city = regionCollection.Find(s => s.ChartPlaceId == chartplaceId).FirstOrDefault();
+            foreach (var item in predictCollection.Find(s => s.Place == city.Place).ToList())
+            {
+                lines.Add(new LineChartInformationList
+                {
+                    Temperature = item.Temperature.ToString(),
+                    Wind = item.Wind.ToString(),
+                    Humidity = item.Humidity.ToString(),
+                    Pressure = item.Pressure.ToString(),
+                    Time = item.Time.ToString(),
+                    Place = city.Place
+                });
+            }
+            return lines;
         }
 
 
