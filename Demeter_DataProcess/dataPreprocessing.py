@@ -34,9 +34,9 @@ class WeatherDataPreprocessing:
             folderScanning = os.listdir(f"./data/{city}")
             for file in folderScanning:
                 df = pd.read_json(f"./data/{city}/{file}")
-                
+                # getDate: for example, "ho-chi-minh-city-2022-12-03.json"
+                # will return 2022-12-03
                 getDate = re.search(r"(\d{4}.*?)(?=[.])",file)
-
                 df['Date'] = [getDate.group()] * len(df)
                 df['Place']= [self._syncing[i]]*len(df)
                 self._df = self._df.append(df)
@@ -48,6 +48,7 @@ class WeatherDataPreprocessing:
         '''
         self._df['Time'] = [datetime.strptime(s, '%Y-%m-%d %H:%M') for s in self._df['Date'] + " " + self._df['Time']]
         self._df['Time'] = [s.strftime('%Y-%m-%dT%H:%M:%S') for s in self._df['Time']]
+
         self._df['Wind'] = self._df['Wind'].replace("Calm", "0 Km/h").str.extract(r'(\d+?)(?= \D)')
         self._df['Temperature'] = self._df['Temperature'].str.extract(r'(\d+)')
         self._df['Rel. humidity'] = self._df['Rel. humidity'].str.extract(r'(\d+)')
@@ -91,8 +92,10 @@ if __name__ == "__main__":
             "Thanh Hoa", "Tra Vinh", "Phu Yen", "Tuyen Quang",  "Phu Tho", "Vinh Long",  \
             "Lai Chau", "Yen Bai",  "Vinh Phuc"
         ]
-    parser = ArgumentParser(description= "Preprocessing Viet Nam data already collected, take 1 argument, save to a folder")
-    parser.add_argument('fdpath', type = str, help = "Folder name to store preprocessed data")
+    parser = ArgumentParser(description= \
+        "Preprocessing Viet Nam data already collected, take 1 argument, save to a folder")
+    parser.add_argument('fdpath', type = str,\
+         help = "Folder name to store preprocessed data")
 
     args = parser.parse_args()
     folder = args.fdpath

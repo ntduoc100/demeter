@@ -1,8 +1,10 @@
 import pymongo
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from argparse import ArgumentParser
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+import numpy as np
+import time
 
 
 class WeatherPrediction:
@@ -31,18 +33,19 @@ class WeatherPrediction:
         - dataCollection: Name of historical collection
         - coefficientCollection: name of coefficient for the model collection
         Description:
-        - Get data and coefficient for training model
+        - Get data and coefficient for training model and return places
+        list in dataframe.
         '''
         historicalDataCollection = self._db.get_collection(dataCollection)
         coefficientCollection= self._db.get_collection(coefCollection)
         # Get the historical data and transform them
-        self._df = pd.DataFrame(list(historicalDataCollection.find()))
-        self._df = self._df.drop(columns = '_id')
+        self._df = pd.DataFrame(list(historicalDataCollection.find({}, {'_id': False})))
         self._df['Time'] = pd.to_datetime(self._df['Time'], format = '%Y-%m-%dT%H:%M:%S')
         self._df = self._df.set_index('Time')
         # Get the coefficient for model
-        self._coef_df =  pd.DataFrame(list(coefficientCollection.find()))
-        self._coef_df = self._coef_df.drop(columns = ['_id'])
+        self._coef_df =  pd.DataFrame(list(coefficientCollection.find({}, {'_id': False})))
+        
+        return self._df['Place'].unique()
 
     def predictAndSave(self, places: list, predictCollection: str):
         '''
@@ -52,7 +55,7 @@ class WeatherPrediction:
         Description:
         - Use SARIMAX to predict and save them to mongoDB
         '''
-        predictlDataCollection = self._db.get_collection(f'{predictCollection}')
+        predictList = []
         for place in places:
             print(place)
             # Get place's data and transform them
@@ -73,25 +76,33 @@ class WeatherPrediction:
                 # Forecast for the next 7 days
                 forecast = results.forecast(56)
                 result_predict.append(forecast)
-
-            predictList = []
+            # Loop to save predicted data
             for i in range(len(result_predict[0])):
                 jsonformat = dict()
                 jsonformat['Time'] = result_predict[0].index[i].strftime('%Y-%m-%dT%H:%M:%S')
-                jsonformat['Temperature'] = round(result_predict[0][i],1)
-                jsonformat['Wind'] = round(result_predict[1][i],1)
-                jsonformat['Humidity'] = round(result_predict[2][i],1)
-                jsonformat['Pressure'] = round(result_predict[3][i],1)
+                jsonformat['Temperature'] = round(result_predict[0][i])
+                if result_predict[1][i] > 0:
+                    jsonformat['Wind'] = round(result_predict[1][i])
+                else: jsonformat['Wind'] = 0
+                jsonformat['Humidity'] = round(result_predict[2][i])
+                jsonformat['Pressure'] = round(result_predict[3][i])
                 jsonformat['Place'] = place
                 predictList.append(jsonformat)
-            predictlDataCollection.insert_many(predictList)
+        # Before save data, make sure that old data has been removed
+        self._db.drop_collection(predictCollection)
+        predictlDataCollection = self._db.get_collection(predictCollection)
+        predictlDataCollection.insert_many(predictList)
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(description= "Uploading parameter for prediction model")
     parser.add_argument('dbname', type = str, help = "Database name that store data")
-    parser.add_argument('collectionName', type = str, help = "Collection name that store data")
-    parser.add_argument('coeffiCollection', type = str, help = "Collection name that store coefficient data")
-    parser.add_argument('predictCollection', type = str, help = "Collection name to store predicted data")
+    parser.add_argument('collectionName', type = str,\
+         help = "Collection name that store historical data")
+    parser.add_argument('coeffiCollection', type = str,\
+         help = "Collection name that store coefficient data")
+    parser.add_argument('predictCollection', type = str,\
+         help = "Collection name to store predicted data")
 
     args = parser.parse_args()
     dbname  = args.dbname
@@ -99,20 +110,9 @@ if __name__ == '__main__':
     coefficientName = args.coeffiCollection
     predictName = args.predictCollection
 
-    places = [
-            "Ho Chi Minh city", 
-            "Hanoi", "Hai Phong", "Thua Thien Hue", "Khanh Hoa", "Can Tho", "Kien Giang", \
-            "Binh Dinh", "Ba Ria - Vung Tau", "Nam Dinh", "Bac Giang", "Bac Lieu",  "Dak Lak", \
-            "Ca Mau", "Quang Ninh",  "Cao Bang",  "Lam Dong", "Dien Bien", \
-            "Quang Tri", "Quang Binh", "Binh Phuoc", "Ha Giang", "Quang Ninh", "Hai Duong", "Hoa Binh", \
-            "Quang Nam", "Kon Tum", "Lao Cai", "An Giang", "Tien Giang", "Ninh Thuan", "Binh Thuan",\
-            "Ben Tre", "Gia Lai", "Quang Ngai", "Soc Trang", "Son La",  "Thai Nguyen", \
-            "Thanh Hoa", "Tra Vinh", "Phu Yen", "Tuyen Quang",  "Phu Tho", "Vinh Long",  \
-            "Lai Chau", "Yen Bai",  "Vinh Phuc"
-        ]
-
     weatherObject = WeatherPrediction()
     connection_string = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     weatherObject.connect(connection_string, dbname)
-    weatherObject.getData(collectionName,coefficientName)
+    places = weatherObject.getData(collectionName,coefficientName)
     weatherObject.predictAndSave(places, predictName)
+

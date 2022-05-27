@@ -55,6 +55,4 @@ if __name__ == '__main__':
     connection_str = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     weatherdataobject = WeatherDataUploading()
     weatherdataobject.connect(connection_str, 'demeter')
-
-
     weatherdataobject.uploadHistoricalData(folder, collectionName)
