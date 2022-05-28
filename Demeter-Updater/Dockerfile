@@ -2,7 +2,7 @@ FROM python:3.9
 
 WORKDIR /code
 
-# Add modules for each data source here
+# Add a package for each data source here
 ADD openweathermap /code/openweathermap
 
 # Requirement
