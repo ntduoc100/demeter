@@ -70,25 +70,23 @@ def interval_runner(worker, interval, **kwargs):
 
 
 def realtime_runner(worker, interval, **kwargs):
-    '''Collect data, keep the interval accuracy'''
     worker(kwargs['collname'])
     time.sleep(interval)
 
 # END OF EDIT
 ######################################################
 
+
 if __name__ == '__main__':
-    
 
     connection_str = 'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     ###############################################
-    # Testing 
+    # Testing
     # connection_str = 'mongodb://demeterdb:27017'
     ###############################################
 
     # This below part is used to created threads for parallel
     # realtime and interval processes
-    
 
     # Add updater objects
     ######################################################
@@ -99,7 +97,6 @@ if __name__ == '__main__':
 
     # END OF EDIT
     ######################################################
-
 
     # Register signals
     signal.signal(signal.SIGTERM, service_shutdown)
@@ -113,7 +110,7 @@ if __name__ == '__main__':
             'realtime',
             realtime_object.update,
             realtime_runner,
-            300, # Change this to change the time between api calls for real time
+            300,  # Change this to change the time between api calls for real time
             collname='realtime_data'
         )
 
