@@ -4007,7 +4007,7 @@
 
 
     createClass(Popper, [{
-      key: 'update',
+      key: 'updateMapChart',
       value: function update$$1() {
         return update.call(this);
       }

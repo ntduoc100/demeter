@@ -1,0 +1,128 @@
+﻿@font-face {
+    font-family: "Roboto-Black";
+    src: url('Roboto/Roboto-Black.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-BlackItalic";
+    src: url('Roboto/Roboto-BlackItalic.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Bold";
+    src: url('Roboto/Roboto-Bold.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-BoldItalic";
+    src: url('Roboto/Roboto-BoldItalic.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Italic";
+    src: url('Roboto/Roboto-Italic.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Light";
+    src: url('Roboto/Roboto-Light.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-LightItalic";
+    src: url('Roboto/Roboto-LightItalic.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Medium";
+    src: url('Roboto/Roboto-Medium.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-MediumItalic";
+    src: url('Roboto/Roboto-MediumItalic.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url('Roboto/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-Thin";
+    src: url('Roboto/Roboto-Thin.ttf');
+}
+
+@font-face {
+    font-family: "Roboto-ThinItalic";
+    src: url('Roboto/Roboto-ThinItalic.ttf');
+}
+
+.Roboto-Black {
+    font-family: "Roboto-Black";
+}
+
+.Roboto-BlackItalic {
+    font-family: "Roboto-BlackItalic";
+}
+
+.Roboto-Bold {
+    font-family: "Roboto-Bold";
+}
+
+.Roboto-BoldItalic {
+    font-family: "Roboto-BoldItalic";
+}
+
+.Roboto-Italic {
+    font-family: "Roboto-Italic";
+}
+
+.Roboto-Light {
+    font-family: "Roboto-Light";
+}
+
+.Roboto-LightItalic {
+    font-family: "Roboto-LightItalic";
+}
+
+.Roboto-Medium {
+    font-family: "Roboto-Medium";
+}
+
+.Roboto-MediumItalic {
+    font-family: "Roboto-MediumItalic";
+}
+
+.Roboto-Regular {
+    font-family: "Roboto-Regular";
+}
+
+.Roboto-Thin {
+    font-family: "Roboto-Thin";
+}
+
+.Roboto-ThinItalic {
+    font-family: "Roboto-ThinItalic";
+}
+
+#loading {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    opacity: 0.7;
+    z-index: 99;
+}
+
+#loading-image {
+    position: absolute;
+    top: -10px;
+    left: 200px;
+    z-index: 100;
+    width: 80%;
+    height: 100%;
+}

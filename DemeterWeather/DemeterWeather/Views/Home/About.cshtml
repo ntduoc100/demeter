@@ -1,27 +1,70 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<div class="container">
-    <div class="jumbotron" style="background-color: #DDEFE4">
-        <h1>Demeter Weather</h1>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Welcome to Demeter Weather</h2>
-            <p>
-                Demeter Wearher is a  application that
-                demonstrates how to predict the weather.
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Build it from scratch</h2>
-            <p>You can build the application by following the steps in a series of tutorials.</p>
-            <p><a class="btn btn-default" href="https://github.com/ntduoc100/demeter">See the tutorial &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Download it</h2>
-            <p>You can download the completed project from GitHub.</p>
-            <p><a class="btn btn-default" href="https://github.com/ntduoc100/demeter">See project source code &raquo;</a></p>
+<script>
+    $('document').ready(function() {
+        setImageVisible();
+        realtimeClock();
+    });
+</script>
+
+<div class="bg-light">
+    <div class="container py-5">
+        <div class="row h-100 align-items-center py-5">
+            <div class="col-lg-6">
+                <h1 class="display-4 Roboto-Regular">Demeter Project</h1>
+                <p class="lead text-muted mb-0 Roboto-Light">A web application about weather forecast prediction.</p>
+                <p class="lead text-muted">
+                    Source code in <a href="https://github.com/ntduoc100/demeter.git" class="text-muted">
+                        <u>Demeter Weather</u>
+                    </a>
+                </p>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block"><img src="https://digitcure.com/wp-content/uploads/2020/10/2052942-1024x790.png" alt="" class="img-fluid"></div>
         </div>
     </div>
 </div>
+
+<div class="bg-light py-5">
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-lg-5">
+                <h2 class="display-4 font-weight-light Roboto-Regular">Demeter team</h2>
+                <p class="font-italic text-muted Roboto-LightItalic">Let's take a glance.</p>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-xl-3 col-sm-6 mb-5">
+                <div class="bg-white rounded shadow-sm py-5 px-4">
+                    <img src="https://bootstrapious.com/i/snippets/sn-about/avatar-3.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h5 class="mb-0 Roboto-Medium">Duoc Nguyen</h5><span class="small text-uppercase text-muted Roboto-Light">Mentor</span>
+                </div>
+            </div>
+            <!-- End item-->
+            <div class="col-xl-3 col-sm-6 mb-5">
+                <div class="bg-white rounded shadow-sm py-5 px-4">
+                    <img src="https://bootstrapious.com/i/snippets/sn-about/avatar-4.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h5 class="mb-0 Roboto-Medium">Ha Pham</h5><span class="small text-uppercase text-muted Roboto-Light">Fullstack Engineering</span>
+                </div>
+            </div>
+            <!-- End item-->
+            <div class="col-xl-3 col-sm-6 mb-5">
+                <div class="bg-white rounded shadow-sm py-5 px-4">
+                    <img src="https://bootstrapious.com/i/snippets/sn-about/avatar-2.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h5 class="mb-0 Roboto-Medium">Khoa Nguyen</h5><span class="small text-uppercase text-muted Roboto-Light">Data Analytics</span>
+                </div>
+            </div>
+            <!-- End item-->
+            <div class="col-xl-3 col-sm-6 mb-5">
+                <div class="bg-white rounded shadow-sm py-5 px-4">
+                    <img src="https://bootstrapious.com/i/snippets/sn-about/avatar-1.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h5 class="mb-0 Roboto-Medium">Tuan Nguyen</h5><span class="small text-uppercase text-muted Roboto-Light">Data Analytics</span>
+                </div>
+            </div>
+            <!-- End-->
+
+        </div>
+    </div>
+</div>
+

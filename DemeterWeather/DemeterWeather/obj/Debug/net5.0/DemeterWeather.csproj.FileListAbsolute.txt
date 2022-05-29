@@ -145,7 +145,6 @@ C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\DemeterWeather.TagHelpers.input.cache
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\DemeterWeather.TagHelpers.output.cache
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\DemeterWeather.RazorCoreGenerate.cache
-C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\Razor\Views\Home\About.cshtml.g.cs
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\Razor\Views\Locations\Error.cshtml.g.cs
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\Razor\Views\Locations\Index.cshtml.g.cs
@@ -167,3 +166,4 @@ C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\bin\Debug
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\bin\Debug\net5.0\DemeterWeather.Views.pdb
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\DemeterWeather.genruntimeconfig.cache
 C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\ref\DemeterWeather.dll
+C:\Users\Omachi\Documents\GitHub\demeter\DemeterWeather\DemeterWeather\obj\Debug\net5.0\Razor\Views\Home\About.cshtml.g.cs
