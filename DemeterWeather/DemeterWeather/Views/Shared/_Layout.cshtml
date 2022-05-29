@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Demeter Weather</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-@*    <link rel="stylesheet" href="/resources/demos/style.css">*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="shortcut icon" href="~/my_icon.ico" />
+    <link href="~/css/StyleSheet.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="~/logo.jpg" />
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js" type="text/javascript"></script>
@@ -41,32 +41,34 @@
         });
     </script>
 </head>
-<body onload="getLocation()" style="background-color: #F5FAF7">
+<body  onload="getLocation()" style="background-color: #F5FAF7">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid" style="margin-left: 100px; width: 90%">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Demeter Weather</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="padding: 0%">
+            <div class="container-fluid" style="margin-left: 10%; width: 80.4%">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/logo.jpg" width="80" height="55"/>
+                </a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav row">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark Roboto-Regular" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                            <a class="nav-link text-dark Roboto-Regular" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
                     </ul>
+                    <div id="clock" class="Roboto-Medium" style="margin-left: 13%; font-size: 40px"></div>
                     <form style="width: 30%" asp-area="" asp-controller="Locations" asp-action="Index" method="get">
-                        <input class="form-control col-lg-12" type="text" id="txtCountry" name="locationName" placeholder="Search any location..." value="@ViewData["Location"]" />
+                        <input class="form-control col-lg-12 Roboto-Light" type="text" id="txtCountry" name="locationName" placeholder="Search any location..." value="@ViewData["Location"]" />
                     </form>
                 </div>
             </div>
         </nav>
+        <div id="loading">
+            <img id="loading-image" src="~/page_loading.gif" alt="Loading..." />
+        </div>
     </header>
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
