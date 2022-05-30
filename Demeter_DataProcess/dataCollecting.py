@@ -29,8 +29,9 @@ class WeatherDataCollecting:
         '''
         sdate = datetime.strptime(sdate, "%Y-%m-%d")
         edate = datetime.strptime(edate, "%Y-%m-%d")
-        delta = edate - sdate       # as timedelta
+        delta = edate - sdate     
         
+        # Generate a period between sdate and edate
         for i in range(delta.days + 1):
             day = sdate + timedelta(days=i)
             self._period.append(day.strftime("%Y-%m-%d"))
@@ -39,7 +40,7 @@ class WeatherDataCollecting:
     def collectData(self, cities: list, gids: list, stations: list, folder: str):
         '''
         Parameters:
-        - cities: list of cities
+        - cities: list of cities in Viet Nam
         - gids: list of id of cities on the maps, in cities's order
         - stations: list of station that get information of cities on the maps, in cities's order
 
@@ -71,22 +72,18 @@ class WeatherDataCollecting:
 
                 soup = BeautifulSoup(rq.text, 'lxml')
                 table = soup.find('table', attrs={'class':'daily-history'})
-
                 table_header = table.find('thead')
                 table_body = table.find('tbody')
-
+                # Strip '\n', '\xa0' in html string
                 attr_list = [str(attr.text.replace('\n','').replace('\xa0','')) for attr in table_header.findAll('th')]
 
                 new_table = pd.DataFrame(columns=attr_list)
-
                 for row in table_body.find_all('tr'):
                     row_vals = [row_val.text.strip() for row_val in row.find_all('td')]
-                    
                     new_row = pd.Series(row_vals, index = new_table.columns)
                     new_table = new_table.append(new_row, ignore_index=True)
                 
                 new_table = new_table.drop(columns=['Wind Gust', 'Icon', 'DescriptionDetails'])
-                
                 new_table.to_json(f"./{folder}/{city}/{city}-{date}.json")
 
 
@@ -102,7 +99,6 @@ if __name__ == "__main__":
             "thai-nguyen", "thanh-hoa", "tra-vinh", "tuy-hoa", "tuyen-quang",  "viet-tri", \
             "vinh-long",  "ye-yen-sun-ho-tao", "yen-bai",  "yen-vinh"
         ]
-
 
     gids = [
             1566083, 1581130, 1581298, 1580240, 1572151, 1586203, 1568510, 1568574, 1562414,\
