@@ -57,8 +57,6 @@ function showError(error) {
         case error.PERMISSION_DENIED:
             alert("User denied the request for Geolocation.");
             setImageVisible();
-            realtimeClock();
-            updateMapChart();
             sendPosition();
             getPredict();
             break;
@@ -77,9 +75,9 @@ function showError(error) {
 // Function to get the gps lcoation at homepage and send coordinate to server
 function getLocation() {
     if (window.location.pathname == '/') {
+        realtimeClock();
+        updateMapChart();
         if (navigator.geolocation) {
-            realtimeClock();
-            updateMapChart();
             navigator.geolocation.getCurrentPosition(sendPosition, showError);
             navigator.geolocation.getCurrentPosition(getPredict);
         } else {
