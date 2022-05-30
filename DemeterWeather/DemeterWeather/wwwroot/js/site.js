@@ -81,7 +81,7 @@ function sendPosition(position) {
             let superscipt = "o";
             place.innerHTML = stringify['place']
             temp.innerHTML = stringify['temperature'] + superscipt.sup() + 'C';
-            wind.innerHTML = 'Wind: ' + stringify['wind'] + ' m/s';
+            wind.innerHTML = 'Wind: ' + stringify['wind'] + ' km/h';
             humidity.innerHTML = 'Humidity: ' + stringify['humidity'] + '%';
             pressure.innerHTML = 'Pressure: ' + stringify['pressure'] + ' hPa';
             time.innerHTML = 'Time: ' + stringify['time'].split('T')[0] + ' ' + stringify['time'].split('T')[1];
