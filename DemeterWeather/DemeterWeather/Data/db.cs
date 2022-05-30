@@ -22,7 +22,7 @@ namespace DemeterProject.Data
         {
             List<ResultList> list = new List<ResultList>();
             var collection = database.Region;
-            foreach (var item in collection.Find(s => s.Place.Contains(prefix)).ToList())
+            foreach (var item in collection.Find(s => s.Place.ToLower().Contains(prefix)).ToList())
             {
                 list.Add(new ResultList
                 {
@@ -140,7 +140,7 @@ namespace DemeterProject.Data
             }
             return chartInformation;
         }
-        
+
         // function to set the switch case for the input filter for the map chart at homepage
         // Input: string filter
         // Output: redirect to the corresponding filter function
@@ -235,7 +235,7 @@ namespace DemeterProject.Data
             ForecastList forecast = getForecastByLocation(city);
             return forecast;
         }
-        
+
         // function to get the predict forecast of the next 5 days
         // Input: coordinate - lat, lon
         // Output: Array of 5 Predict List Objects
@@ -285,7 +285,7 @@ namespace DemeterProject.Data
         {
             List<ForecastList> predict = new List<ForecastList>();
             var collection = database.Predict;
-            foreach(var item in collection.Find(s => s.Place == city).ToList())
+            foreach (var item in collection.Find(s => s.Place == city).ToList())
             {
                 predict.Add(new ForecastList
                 {
@@ -300,5 +300,5 @@ namespace DemeterProject.Data
             }
             return predict;
         }
-     }
+    }
 }
