@@ -40,8 +40,8 @@ class Updater:
         '''
         return {
             'Time': modified_time,
-            'Temperature': round(jsondata['main']['temp'] - 272.15, 0),
-            'Wind': jsondata['wind']['speed'],
+            'Temperature': round(jsondata['main']['temp'] - 272.15, 0), # Kelvin to Celsius
+            'Wind': round(float(jsondata['wind']['speed'])*3.6, 1), # m/s to km/h
             'Humidity': jsondata['main']['humidity'],
             'Pressure': jsondata['main']['pressure'],
             'Place': region_name
@@ -128,21 +128,12 @@ class UpdaterRealtime(Updater):
         super().__init__(connection_string, dbname)
 
     def _query_func(self, collname, **kwargs):
-        # Create index if the collection does not exists
-        create_index = False
-        if collname not in self._db.list_collection_names():
-            create_index = True
-
+        # Remove old collection
+        # Create index
+        self._db.drop_collection(collname)
         collection = self._db.get_collection(collname)
-        for data in kwargs['data']:
-            collection.find_one_and_update(
-                {'Place': kwargs['region']['Place']},
-                {'$set': data},
-                upsert=True,
-            )
-
-        if create_index == True:
-            collection.create_index('Place')
+        collection.insert_many(kwargs['data'])
+        collection.create_index('Place')
 
 
 class UpdaterInterval(Updater):

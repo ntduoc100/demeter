@@ -4,6 +4,10 @@
 - Occasional weather data crawling (30 min interval). Data are stored in historical_data
 ## Testing
 - Uncomment connection string in ```Testing``` block of ```runner.py``` and ```region_data.py``` and comment the one which is outside of the block
+- Pull MongoDB image from DockerHub
+
+```docker pull mongo```
+
 - Build an image named demeter-updater 
 
 ```docker build -t demeter-updater .```
@@ -12,9 +16,9 @@
 
 ```docker compose up```
 
-- To access database on MongoDB Compass, enter this URL: 
+- To view database on MongoDB Compass, enter this URL: 
 
-```mongodb:localhost:27017```
+```mongodb://localhost:27017```
 
 ## More data sources
 - Create modules that used to process data from the source
