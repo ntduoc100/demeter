@@ -55,20 +55,21 @@ function getLocationMapID() {
 function showError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            console.log("User denied the request for Geolocation.");
+            alert("User denied the request for Geolocation.");
+            setImageVisible();
+            sendPosition();
+            getPredict();
             break;
         case error.POSITION_UNAVAILABLE:
-            console.log("Location information is unavailable.");
+            alert("Location information is unavailable.");
             break;
         case error.TIMEOUT:
-            console.log("The request to get user location timed out.");
+            alert("The request to get user location timed out.");
             break;
         case error.UNKNOWN_ERROR:
-            console.log("An unknown error occurred.");
+            alert("An unknown error occurred.");
             break;
     }
-    sendPosition();
-    getPredict();
 }
 
 // Function to get the gps lcoation at homepage and send coordinate to server

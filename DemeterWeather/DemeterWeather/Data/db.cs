@@ -34,8 +34,8 @@ namespace DemeterProject.Data
 
             var collection = database.Region;
 
-            foreach (var item in collection.Find(s => s.Place.ToLower().Contains(prefix)).ToList())
-            //foreach (var item in collection.Find(Builders<Region>.Filter.Text(prefix)).ToList())
+            //foreach (var item in collection.Find(s => s.Place.ToLower().Contains(prefix)).ToList())
+            foreach (var item in collection.Find(Builders<Region>.Filter.Text(prefix)).ToList())
             {
                 locationList.Add(new ResultList
                 {

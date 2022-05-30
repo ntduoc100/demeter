@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DemeterWeather.Data;
-using MongoDB.Driver;
-using DemeterWeather.Models;
 
 namespace DemeterWeather
 {
@@ -17,26 +13,7 @@ namespace DemeterWeather
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    try
-            //    {
-            //        var context = services.GetRequiredService<MongoDbContext>();
-            //        var collection = context.Region;
-            //        collection.Indexes.CreateOne(
-            //            new CreateIndexModel<Region>(
-            //                Builders<Region>.IndexKeys.Text(r => r.Place)
-            //                ));
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        var logger = services.GetRequiredService<ILogger<Program>>();
-            //        logger.LogError(ex, "An error occurred creating the DB.");
-            //    }
-            //}
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
