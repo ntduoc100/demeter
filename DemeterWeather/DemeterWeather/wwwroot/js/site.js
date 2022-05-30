@@ -69,7 +69,7 @@ function getLocation() {
 // Input: coordinate of position
 // Output: display the weather information in homepage
 function sendPosition(position) {
-    var lat = position.coords.latitude;
+    var lat = position.coords.latitude;  
     var lon = position.coords.longitude;
     $.ajax({
         type: "POST",
