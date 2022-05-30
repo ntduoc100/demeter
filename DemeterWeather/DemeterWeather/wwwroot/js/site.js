@@ -20,12 +20,12 @@ function realtimeClock() {
     var minutes = rtClock.getMinutes();
     var seconds = rtClock.getSeconds();
 
-    var amPm = (hours < 12) ? "AM" : "PM" 
+    var amPm = (hours < 12) ? "AM" : "PM"
 
     hours = (hours > 12) ? hours - 12 : hours;
 
     // Add zero digit to front of variable and take the last 2 digits to create the hour/minute/second
-    hours = ("0" + hours).slice(-2);    
+    hours = ("0" + hours).slice(-2);
     minutes = ("0" + minutes).slice(-2);
     seconds = ("0" + seconds).slice(-2);
 
@@ -51,16 +51,39 @@ function getLocationMapID() {
         }
     });
 }
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            setImageVisible();
+            realtimeClock();
+            updateMapChart();
+            sendPosition();
+            getPredict();
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
 // Function to get the gps lcoation at homepage and send coordinate to server
 function getLocation() {
     if (window.location.pathname == '/') {
         if (navigator.geolocation) {
             realtimeClock();
             updateMapChart();
-            navigator.geolocation.getCurrentPosition(sendPosition);
+            navigator.geolocation.getCurrentPosition(sendPosition, showError);
             navigator.geolocation.getCurrentPosition(getPredict);
         } else {
-            place.innerHTML = "Geolocation is not supported by this browser.";
+            alert("Geolocation is not supported by this browser.");
         }
     }
 }
@@ -69,8 +92,14 @@ function getLocation() {
 // Input: coordinate of position
 // Output: display the weather information in homepage
 function sendPosition(position) {
-    var lat = position.coords.latitude;  
-    var lon = position.coords.longitude;
+    if (position != null) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+    }
+    else {
+        var lat = "10.75";
+        var lon = "106.666672"
+    }
     $.ajax({
         type: "POST",
         url: '/Home/GetRealtime/',
@@ -111,8 +140,14 @@ function sendPosition(position) {
 // Input: coordinate position of gps function
 // Output: the array of 5 Objects
 function getPredict(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
+    if (position != null) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+    }
+    else {
+        var lat = "10.75";
+        var lon = "106.666672"
+    }
     $.ajax({
         type: "POST",
         url: '/Home/GetPredict/',
