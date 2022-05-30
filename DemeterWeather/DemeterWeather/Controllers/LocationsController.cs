@@ -17,7 +17,7 @@ namespace DemeterWeather.Controllers
         {
             ForecastList forecast = dbop.getForecastByLocation(locationName);
             ViewData["Temperature"] = forecast.Temperature;
-            ViewData["Wind"] = "Wind: " + forecast.Wind + " m/s";
+            ViewData["Wind"] = "Wind: " + forecast.Wind + " km/h";
             ViewData["Humidity"] = "Humidity: " + forecast.Humidity + "%";
             ViewData["Pressure"] = "Pressure: " + forecast.Pressure + " hPa";
             ViewData["Time"] = "Time: " + forecast.Time.Split('T')[0] + ' ' + forecast.Time.Split('T')[1];
@@ -60,7 +60,7 @@ namespace DemeterWeather.Controllers
                     // mapping information for the view data
                     @ViewData["Time" + i] = predict[i].Time.Split('T')[0] + ' ' + predict[i].Time.Split('T')[1];
                     @ViewData["Temp" + i] = predict[i].Temperature;
-                    @ViewData["Wind" + i] = "Wind: " + predict[i].Wind + " m/s";
+                    @ViewData["Wind" + i] = "Wind: " + predict[i].Wind + " km/h";
                     @ViewData["Humidity" + i] = "Humidity: " + predict[i].Humidity + "%";
                     @ViewData["Pressure" + i] = "Pressure: " + predict[i].Pressure + " hPa";
                     // change weather forecast icon based on temperature
