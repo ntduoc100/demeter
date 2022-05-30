@@ -8,8 +8,8 @@ from argparse import ArgumentParser
 class WeatherDataPreprocessing:
     '''
     Description:
-    This class is used to preprocess data that we collect from mv.freemeteo.com
-    and store them in a folder, in different format.
+    This class is used to preprocess data that we collect from 
+    mv.freemeteo.com and store them in a folder, in different format.
     '''
     def __init__(self):
         self._cities = None
