@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using DemeterWeather.Data;
 using MongoDB.Driver;
 using System;
+using System.Text.RegularExpressions;
 
 namespace DemeterProject.Data
 
@@ -20,17 +21,30 @@ namespace DemeterProject.Data
         // Output: the list of location that has prefix
         public List<ResultList> GetListLocation(string prefix)
         {
-            List<ResultList> list = new List<ResultList>();
+            List<ResultList> locationList = new List<ResultList>();
+
+            if (string.IsNullOrEmpty(prefix))
+                return locationList;
+
+            prefix = Regex.Replace(prefix, @"\s+", " ");
+            prefix = prefix.ToLower().Trim();
+
+            if (string.IsNullOrEmpty(prefix))
+                return locationList;
+
             var collection = database.Region;
+
             foreach (var item in collection.Find(s => s.Place.ToLower().Contains(prefix)).ToList())
+            //foreach (var item in collection.Find(Builders<Region>.Filter.Text(prefix)).ToList())
             {
-                list.Add(new ResultList
+                locationList.Add(new ResultList
                 {
                     Label = item.Place.ToString(),
                     Val = item.PlaceId.ToString(),
                 });
             }
-            return list;
+
+            return locationList;
         }
 
         // function to check whether the location exist or not
