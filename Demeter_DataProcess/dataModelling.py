@@ -6,7 +6,13 @@ import numpy as np
 from argparse import ArgumentParser
 
 
-class WeatherDataPredicting:
+class WeatherDataModelling:
+    '''
+    Description:
+    - For the SAMRIMAX model, try to find $(p,q,r)$
+    and seasonal_order for this model. Then, store
+    them to mongoDb for the next phase
+    '''
     def __init__(self):
         self._db = None
         self._modelCoefficient = []
@@ -108,7 +114,7 @@ if __name__ == '__main__':
     coefficientCollection = args.coefficollection
 
     connection_string = f'mongodb+srv://root:12345ADMIN@cluster0.5qjhz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    predictObject = WeatherDataPredicting()
+    predictObject = WeatherDataModelling()
     predictObject.connect(connection_string, dbname)
     places = predictObject.getData(historicalCollectionName)
     for place in places:

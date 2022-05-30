@@ -3,86 +3,67 @@
 }
 
 <div class="grid-container" style="display: grid; grid-template-rows: 300px 150px 300px; width: 80%; gap: 15px; margin-top: 15px; margin-left: 10%">
-    <div class="item1" style="grid-area: 1/1/1/1">
+    <div class="item1" style="grid-area: 1/1/1/3">
         <div id="background" style="height: 50%; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2); ">
-            <div style="height: 20%; background-color: #125C13; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
-                <p id="location" onclick="clickLocation()" style="font-weight:500; font-size:20px; text-align: center; color:white"></p>
+            <div class="row" style="margin-left: 0%; width: 100%; height: 20%; background-color: #00B14F; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
+                <p class="Roboto-Medium" id="location" onclick="clickLocation()" style="margin-left: 43%; margin-right: 0.5%; font-size:20px; text-align: center; color:white"></p>
+                <img src="~/location.png" onclick="clickLocation()" width="17" height="23" style="margin-top: 0.3%"/>
             </div>
             <div class="row" style="height: 65%; margin-left: 15px">
-                <div id="temperature" style="width: 20%; margin-left: 5%; margin-right:15%; font-size:75px; text-align:center; font-weight:500"></div>
+                <div class="Roboto-Bold" id="temperature" style="width: 20%; margin-left: 5%; margin-right:15%; font-size:75px; text-align:center; font-weight:500"></div>
                 <div class="col" style="width: 5%; margin-top: 20px">
-                    <div id="wind" style="height:50%; font-size:15px; font-weight:500"></div>
-                    <div id="humidity" style="height:50%; font-size:15px; font-weight:500"></div>
+                    <div class="Roboto-Medium" id="wind" style="height:50%; font-size:15px; font-weight:500"></div>
+                    <div class="Roboto-Medium" id="humidity" style="height:50%; font-size:15px; font-weight:500"></div>
                 </div>
                 <div class="col" style="width: 5%; margin-top: 20px">
-                    <div id="pressure" style="height:50%; font-size:15px; font-weight:500"></div>
-                    <div id="time" style="height:50%; font-size:15px; font-weight:500"></div>
+                    <div class="Roboto-Medium" id="pressure" style="height:50%; font-size:15px; font-weight:500"></div>
+                    <div class="Roboto-Medium" id="time" style="height:50%; font-size:15px; font-weight:500"></div>
                 </div>
             </div>
         </div>
         <div class="row" style="height: 50%; width: 100%; margin-left: 0px; margin-top: 1%">
             <div style="width: 19.5%; background-image: url(); margin: 0.25%; background-color: white; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-                <div id="date1" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
-                <div id="mean1" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
-                <div id="range1" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Regular" id="date1" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Medium" id="mean1" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
+                <div class="Roboto-Regular" id="range1" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
             </div>
             <div style="width: 19.5%; background-image: url(); margin: 0.25%; background-color: white; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-                <div id="date2" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
-                <div id="mean2" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
-                <div id="range2" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Regular" id="date2" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Medium" id="mean2" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
+                <div class="Roboto-Regular" id="range2" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
             </div>
             <div style="width: 19.5%; background-image: url(); margin: 0.25%; background-color: white; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-                <div id="date3" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
-                <div id="mean3" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
-                <div id="range3" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Regular" id="date3" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Medium" id="mean3" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
+                <div class="Roboto-Regular" id="range3" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
             </div>
             <div style="width: 19.5%; background-image: url(); margin: 0.25%; background-color: white; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-                <div id="date4" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
-                <div id="mean4" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
-                <div id="range4" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Regular" id="date4" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Medium" id="mean4" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
+                <div class="Roboto-Regular" id="range4" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
             </div>
             <div style="width: 19.5%; background-image: url(); margin: 0.25%; background-color: white; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-                <div id="date5" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
-                <div id="mean5" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
-                <div id="range5" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Regular" id="date5" style="height:18%; margin-top: 5%; text-align:center; font-size: 20px"></div>
+                <div class="Roboto-Medium" id="mean5" style="height:50%; margin-left: 5px; text-align:center; font-size:50px"> </div>
+                <div class="Roboto-Regular" id="range5" style="height:15%; margin-bottom: 5%; text-align:center; font-size: 20px"></div>
             </div>
         </div>
     </div>
-    <div class="item2" style="grid-area: 1/2/5/3; width: 100%">
-        <div style="height: 3.8%; color:white; background-color: #125C13; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
-            <label for="filters" style="margin-top: 0.5%; margin-left: 1%">Choose a filter:</label>
-            <select name="filters" id="filters" onchange="update()">
-                <option >--Choose filter for information map--</option>
-                <option value="Temperature">Temperature</option>
-                <option value="Wind">Wind</option>
-                <option value="Humidity">Humidity</option>
-                <option value="Pressure">Pressure</option>
-            </select>
+    <div class="item2" style="grid-area: 1/3/5/3; width: 100%">
+        <div class="row" style="margin-left: 0%; width: 100%; height: 3.8%; color:white; background-color: #00B14F; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
+            <input type="radio" id="temperature" onchange="updateMapChart()" name="filters" value="Temperature" style="margin: 1.5%; margin-left: 7%" checked="checked">
+            <label class="Roboto-Light" for="temperature" style="margin-top: 0.5%">Temperature</label>
+            <input type="radio" id="wind" onchange="updateMapChart()" name="filters" value="Wind" style="margin: 1.5%; margin-left: 7%">
+            <label class="Roboto-Light" for="wind" style="margin-top: 0.5%">Wind</label>
+            <input type="radio" id="humidity" onchange="updateMapChart()" name="filters" value="Humidity" style="margin: 1.5%; margin-left: 7%">
+            <label class="Roboto-Light" for="humidity" style="margin-top: 0.5%">Humidity</label>
+            <input type="radio" id="pressure" onchange="updateMapChart()" name="filters" value="Pressure" style="margin: 1.5%; margin-left: 7%">
+            <label class="Roboto-Light" for="pressure" style="margin-top: 0.5%">Pressure</label>
         </div>
-        <div id="container" style="height: 95%">
-            <script>
-                anychart.onDocumentReady(function () {
-                var map = anychart.map();
-                var dataSet = anychart.data.set();
-                series = map.choropleth(dataSet);
-
-                series.geoIdField('id');
-
-                series.colorScale(anychart.scales.linearColor('#deebf7', '#3182bd'));
-                series.hovered().fill('#addd8e');
-
-                // https://cdn.anychart.com/#maps-collection
-                map.geoData(anychart.maps['vietnam']);
-
-                map.container('container');
-
-                map.draw();
-            });
-            </script>
+        <div id="container" style="height: 96.2%; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
         </div>
     </div>
-    <div class="item3" style="grid-area: 2/1/5/1; margin-top: 1%; width: 100%">
-        <button onclick="lineChart()">chart</button>
+    <div class="item3" style="grid-area: 2/1/5/3; margin-top: 1%; width: 100%">
         <div id="lineChart" style="height: 100%; width: 100%; border: none;border-radius: 2px;box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)"></div>
     </div>
 </div>
