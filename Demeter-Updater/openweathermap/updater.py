@@ -34,18 +34,9 @@ class Updater:
         self._db = client.get_database(dbname)
         self._api_key = '4ce6dbd5661bd1a387f31884de79b6c2'
 
+    @abstractmethod
     def _transform_data(self, jsondata: dict, region_name: str, modified_time: str):
-        '''
-        This function will convert raw json data to a formatted one 
-        '''
-        return {
-            'Time': modified_time,
-            'Temperature': round(jsondata['main']['temp'] - 272.15, 0), # Kelvin to Celsius
-            'Wind': round(float(jsondata['wind']['speed'])*3.6, 1), # m/s to km/h
-            'Humidity': jsondata['main']['humidity'],
-            'Pressure': jsondata['main']['pressure'],
-            'Place': region_name
-        }
+        pass
 
     @abstractmethod
     def _query_func(self, collection, **kwargs):
@@ -126,6 +117,19 @@ class UpdaterRealtime(Updater):
 
     def __init__(self, connection_string: str, dbname: str):
         super().__init__(connection_string, dbname)
+    
+    def _transform_data(self, jsondata: dict, region_name: str, modified_time: str):
+        '''
+        This function will convert raw json data to a formatted one 
+        '''
+        return {
+        'Time': modified_time,
+        'Temperature': round(jsondata['main']['temp'] - 272.15, 0), # Kelvin to Celsius
+        'Wind': round(float(jsondata['wind']['speed'])*3.6, 1), # m/s to km/h
+        'Humidity': jsondata['main']['humidity'],
+        'Pressure': jsondata['main']['pressure'],
+        'Place': region_name
+        }
 
     def _query_func(self, collname, **kwargs):
         # Remove old collection
@@ -145,6 +149,19 @@ class UpdaterInterval(Updater):
     def __init__(self, connection_string: str, dbname: str):
         super().__init__(connection_string, dbname)
 
+    def _transform_data(self, jsondata: dict, region_name: str, modified_time: str):
+        '''
+        This function will convert raw json data to a formatted one 
+        '''
+        return {
+        'Time': modified_time,
+        'Temperature': round(jsondata['main']['temp'] - 272.15, 0), # Kelvin to Celsius
+        'Wind': round(jsondata['wind']['speed'], 1),
+        'Humidity': jsondata['main']['humidity'],
+        'Pressure': jsondata['main']['pressure'],
+        'Place': region_name
+        }
+
     def _query_func(self, collname, **kwargs):
         collection = self._db.get_collection(collname)
-        return collection.insert_many(kwargs['data'])
+        collection.insert_many(kwargs['data'])
