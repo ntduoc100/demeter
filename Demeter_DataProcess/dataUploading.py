@@ -6,6 +6,11 @@ import pandas as pd
 from argparse import ArgumentParser
 
 class WeatherDataUploading:
+    '''
+    Description:
+    - This class get data after preprocessing
+    and upload them to mongoDB server
+    '''
     def __init__(self):
         self._db = None
 
