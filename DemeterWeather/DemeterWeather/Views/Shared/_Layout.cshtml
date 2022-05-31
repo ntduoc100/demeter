@@ -16,36 +16,12 @@
     <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
     <script src="https://cdn.anychart.com/releases/8.11.0/geodata/countries/vietnam/vietnam.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js" data-export="true"></script>
-    <script>
-        $(function() {
-            $("#txtCountry").autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: '/Home/LocationList/',
-                        data: { "prefix": request.term },
-                        type: "POST",
-                        success: function(data) {
-                            response($.map(data, function(item) {
-                                return item;
-                            }))
-                        },
-                        error: function(reposnse) {
-                            alert(reposnse.responseText);
-                        },
-                        failure: function(reposnse) {
-                            alert(reposnse.reposnseText);
-                        }
-                    });
-                },
-            });
-        });
-    </script>
 </head>
-<body  onload="getLocation()" style="background-color: #F5FAF7">
+<body style="background-color: #F5FAF7">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="padding: 0%">
             <div class="container-fluid" style="margin-left: 10%; width: 80.4%">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img src="~/logo.jpg" width="80" height="55"/>
                 </a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -58,8 +34,8 @@
                         </li>
                     </ul>
                     <div id="clock" class="Roboto-Medium" style="margin-left: 13%; font-size: 40px"></div>
-                    <form style="width: 30%" asp-area="" asp-controller="Locations" asp-action="Index" method="get">
-                        <input class="form-control col-lg-12 Roboto-Light" type="text" id="txtCountry" name="locationName" placeholder="Search any location..." value="@ViewData["Location"]" />
+                    <form style="width: 30%" asp-controller="Home" asp-action="Detail" method="get">
+                        <input class="form-control col-lg-12 Roboto-Light" type="text" id="searchBar" name="regionName" placeholder="Search any location..." value="@ViewData["RegionName"]" />
                     </form>
                 </div>
             </div>

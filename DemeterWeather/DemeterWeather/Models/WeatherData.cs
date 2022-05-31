@@ -3,10 +3,11 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DemeterWeather.Models
 {
-    public class WeatherForecast
+    public class WeatherData
     {
         [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         [BsonElement("Time")]
         public string Time { get; set; }
         [BsonElement("Temperature")]
@@ -18,6 +19,6 @@ namespace DemeterWeather.Models
         [BsonElement("Pressure")]
         public double Pressure { get; set; }
         [BsonElement("Place")]
-        public string Place { get; set; }
+        public string RegionName { get; set; }
     }
 }

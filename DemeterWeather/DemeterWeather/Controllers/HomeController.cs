@@ -1,100 +1,98 @@
-﻿using DemeterWeather.Models;
+﻿using System.Collections.Generic;
+using DemeterWeather.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using DemeterProject.Data;
-using System.Text.Encodings.Web;
+using DemeterWeather.Services;
 
-namespace DemeterProject.Controllers
+namespace DemeterWeather.Controllers
 {
     public class HomeController : Controller
     {
-        // create a database object
-        Db dbop = new Db();
+        private readonly PredictService _predictService;
+        private readonly RealtimeService _realtimeService;
+        private readonly RegionService _regionService;
 
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            RegionService regionService,
+            RealtimeService realtimeService,
+            PredictService predictService)
         {
-            _logger = logger;
+            _regionService = regionService;
+            _predictService = predictService;
+            _realtimeService = realtimeService;
         }
 
-        // controller function for the autocomplete search in the client
-        // Input: string prefix
-        // Output: Json format of list of LocationList
-        [HttpPost]
-        public JsonResult LocationList(string prefix)
-        {
-            List<ResultList> list = dbop.GetListLocation(prefix);
-            return Json(list);
-        }
-
-        // controller function for returning the chart place id for the location name
-        // Input: string city
-        // Output: chartPlaceId
-        [HttpPost]
-        public string GetLocationMapID(string city)
-        {
-            return dbop.GetLocationMapID(city);
-        }
-
-        // controller function to get the information for the Map Chart
-        // Input: string filter
-        // Output: Json format of the List of ResultList 
-        [HttpPost]
-        public JsonResult MapChartInformationList(string filter)
-        {
-            List<ResultList> chartInformation = dbop.GetMapChartInformation(filter);
-            return Json(chartInformation);
-        }
-
-        // controller function to get the information for the Line Chart
-        // Input: string chartplaceId
-        // Output: Json format of the List of ForecaseList
-        [HttpPost]
-        public JsonResult LineChartInformationList(string chartPlaceId)
-        {
-            List<ForecastList> lines = dbop.GetLineChartInformation(chartPlaceId);
-            return Json(lines);
-        }
-
-        // controller function to get the realtime weather forecast
-        // Input: coordinate - lat, lon
-        // Output: Json format of the List of the ForecaseList
-        [HttpPost]
-        public JsonResult GetRealtime(string lat, string lon)
-        {
-            ForecastList res = dbop.GetWeatherForecast(lat, lon);
-            return Json(res);
-        }
-
-        // controller functon to get the predict forecast
-        // Input: coordinate - lat, lon
-        // Output: Json format of the List of PredictList
-        [HttpPost]
-        public JsonResult GetPredict(string lat, string lon)
-        {
-            List<PredictList> res = dbop.GetPredictForecast(lat, lon);
-            return Json(res);
-        }
-
-        // controller function for Index View page
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
 
-        // controller function for About View page
-        public async Task<IActionResult> About()
+        public IActionResult Detail(string regionName)
+        {
+            if (string.IsNullOrEmpty(regionName))
+                return RedirectToAction("Index");
+
+            var region = _regionService.FindByName(regionName);
+            if (region == null)
+            {
+                var text = RegionService.PreprocessRegionName(regionName);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    region = _regionService.DoFuzzySearch(regionName)
+                        .FirstOrDefault();
+                }
+            }
+
+            if (region == null)
+                return RedirectToAction("NotExisted");
+
+            ViewData["RegionName"] = region.RegionName;
+
+            var realtimeData = _realtimeService.FindByRegionName(region.RegionName);
+            if (realtimeData == null)
+                return RedirectToAction("Error");
+
+            ViewData["Temperature"] = realtimeData.Temperature;
+            ViewData["Wind"] = "Wind: " + realtimeData.Wind + " km/h";
+            ViewData["Humidity"] = "Humidity: " + realtimeData.Humidity + "%";
+            ViewData["Pressure"] = "Pressure: " + realtimeData.Pressure + " hPa";
+            ViewData["Time"] = "Time: " + realtimeData.Time.Split('T')[0] + ' ' + realtimeData.Time.Split('T')[1];
+            ViewData["Background"] = realtimeData.Temperature < 30
+                ? "url(https://www.wallpaperup.com/uploads/wallpapers/2015/11/19/838974/1a6094aabc9ec2b40bbbb694a8a55c38-700.jpg)"
+                : "url(https://arizonaoddities.com/wp-content/uploads/2012/06/Clouds.jpg)";
+
+            var limit = 8;
+            var predictData = _predictService.FindByRegion(region.RegionName, limit);
+            if (predictData.Count != limit)
+                return RedirectToAction("Error");
+
+            for (var i = 0; i < limit; i++)
+            {
+                ViewData["Time" + i] = predictData[i].Time.Split('T')[0] + ' ' + predictData[i].Time.Split('T')[1];
+                ViewData["Temp" + i] = predictData[i].Temperature;
+                ViewData["Wind" + i] = "Wind: " + predictData[i].Wind + " km/h";
+                ViewData["Humidity" + i] = "Humidity: " + predictData[i].Humidity + "%";
+                ViewData["Pressure" + i] = "Pressure: " + predictData[i].Pressure + " hPa";
+                // change weather forecast icon based on temperature
+                ViewData["Image" + i] = predictData[i].Temperature < 30
+                    ? "well.png"
+                    : "hot.png";
+            }
+
+            return View();
+        }
+
+        public IActionResult NotExisted()
         {
             return View();
-
         }
+
+        public IActionResult About()
+        {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
