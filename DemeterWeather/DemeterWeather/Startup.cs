@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DemeterWeather.Models;
+using DemeterWeather.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using DemeterWeather.Data;
+using Microsoft.Extensions.Options;
 
 namespace DemeterWeather
 {
@@ -25,7 +21,21 @@ namespace DemeterWeather
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.Configure<DemeterDatabaseSettings>(
+                Configuration.GetSection(nameof(DemeterDatabaseSettings)));
+            
+            services.AddSingleton<IDemeterDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<DemeterDatabaseSettings>>().Value);
+
+            services.AddSingleton<RegionService>();
+            services.AddSingleton<RealtimeService>();
+            services.AddSingleton<PredictService>();
+
+            services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +51,7 @@ namespace DemeterWeather
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -51,8 +62,8 @@ namespace DemeterWeather
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
