@@ -31,10 +31,11 @@ class WeatherDataModelling:
     def getData(self, historicalCollectionName: str):
         '''
         Parameters:
-        - historicalCollectionName: Name of the collection that store historical data
+        - historicalCollectionName: Name of the collection that 
+        store historical data
         Description:
-        - Get data from the chosen collection, change some properties to match the model
-        and return the list of place in this collection
+        - Get data from the chosen collection, change some properties 
+        to match the model and return the list of place in this collection
         '''
         historicalData = self._db.get_collection(f'{historicalCollectionName}')
         self._df = pd.DataFrame(list(historicalData.find()))
