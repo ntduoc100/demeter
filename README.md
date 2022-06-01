@@ -2,8 +2,8 @@
 A website for Weather analyst and prediction
 ## Description
 The project divided into 3 phase:
-- Process for historical data, access `./Demeter-Dataprocess` for more.
-- Process for update realtime data automatically, access `./Demeter-Updater` for more.
+- Process for historical data, access `./Demeter-Data/Demeter-Dataprocess` for more.
+- Process for update realtime data automatically, access `./Demeter-Data/Demeter-Updater` for more.
 - The Website for Demeter Weather, access `./DemeterWeather` for more.
 
 ## Tech stack
@@ -15,8 +15,15 @@ The project divided into 3 phase:
 - Data handling language: Python
 
 ## How to run project
-- To run `Demeter-DataProcess`, access **README.md** in this folder for more information.
-- To run `Demeter-Updater`, access **README.md** in this folder for more information
+- To run `./Demeter-Data/Demeter-DataProcess`, access **README.md** in this folder for more information.
+- To run `./Demeter-Data/Demeter-Updater`, access **README.md** in this folder for more information
+- To run Web App, do the following step:
+  -  Install some dependencies:
+    -  FuzzySharp (2.0.2)
+    -  Microsoft.EntityFrameworkCore.Tools (5.0.17)
+    -  Microsoft.VisualStudio.Web.CodeGeneration.Design (5.0.2)
+    -  MongoDB.Driver (2.15.1)
+  -  Install Visual Studio, open `sln` file and Click 'Run'
 
 ## Live demo: https://www.......com
 
