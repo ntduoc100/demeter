@@ -31,9 +31,9 @@ function updateLineChartDetail() {
 
                 // Convert data to 2d array
                 var newData = [];
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < 20; i++) {
                     newData[i] = [
-                        result[i]["Time"].slice(0, 7) + " " + result[i]["Time"].slice(11, 16),
+                        result[i]["Time"].slice(5, 10) + " " + result[i]["Time"].slice(11, 16),
                         result[i]["Temperature"],
                         result[i]["Humidity"],
                         result[i]["Pressure"],
