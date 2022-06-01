@@ -2,6 +2,8 @@
 
 A branch in [Demeter Weather](https://github.com/ntduoc100/demeter), used to crawl data, preprocess, update, train and predict for a weather project.
 
+For public branch to use Github Actions, please access [Public-DataProcess](https://github.com/huutuan122/test-crawl)
+
 # Description
 
 - `dataCollecting.py` used to collect data from free.meteo.com
