@@ -63,7 +63,14 @@ function updateMapChart() {
 
                 series.geoIdField("id");
 
-                series.colorScale(anychart.scales.linearColor("#deebf7", "#3182bd"));
+                if (filter == "Temperature")
+                    series.colorScale(anychart.scales.linearColor("#FFC3C3", "#990000"));
+                else if (filter == "Humidity")
+                    series.colorScale(anychart.scales.linearColor("#deebf7", "#3182bd"));
+                else if (filter == "Wind") 
+                    series.colorScale(anychart.scales.linearColor("#C4DDFF", "#112B3C"));
+                else
+                    series.colorScale(anychart.scales.linearColor("#DAE5D0", "#B4E197"));
                 series.hovered().fill("#addd8e");
 
                 map.title("Realtime Map for " + filter);
@@ -230,7 +237,14 @@ function updateLineChart() {
                 }
                 var firstSeriesData = dataSet.mapAs({ x: 0, value: mapValue[filter] });
                 var series;
-                series = chart.splineArea(firstSeriesData).fill(["#deebf7", "#3182bd"], 90);
+                if (filter == "Temperature")
+                    series = chart.splineArea(firstSeriesData).fill(["#FFC3C3", "#990000"], 90);
+                else if (filter == "Humidity")
+                    series = chart.splineArea(firstSeriesData).fill(["#deebf7", "#3182bd"], 90);
+                else if (filter == "Wind") 
+                    series = chart.splineArea(firstSeriesData).fill(["#C4DDFF", "#112B3C"], 90);
+                else
+                    series = chart.splineArea(firstSeriesData).fill(["#DAE5D0", "#B4E197"], 90);
                 series.name("Time");
                 series.labels().enabled(true).anchor("top").padding(10);
                 series.labels().fontFamily("Roboto-Light");
