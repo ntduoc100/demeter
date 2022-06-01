@@ -19,10 +19,10 @@ The project divided into 3 phase:
 - To run `./Demeter-Data/Demeter-Updater`, access **README.md** in this folder for more information
 - To run Web App, do the following step:
   -  Install some dependencies:
-    -  FuzzySharp (2.0.2)
-    -  Microsoft.EntityFrameworkCore.Tools (5.0.17)
-    -  Microsoft.VisualStudio.Web.CodeGeneration.Design (5.0.2)
-    -  MongoDB.Driver (2.15.1)
+      -  FuzzySharp (2.0.2)
+      -  Microsoft.EntityFrameworkCore.Tools (5.0.17)
+      -  Microsoft.VisualStudio.Web.CodeGeneration.Design (5.0.2)
+      -  MongoDB.Driver (2.15.1)
   -  Install Visual Studio, open `sln` file and Click 'Run'
 
 ## Live demo: https://www.......com
