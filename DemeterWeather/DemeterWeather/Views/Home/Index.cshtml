@@ -54,16 +54,16 @@
 		</div>
 	</div>
 	<div style="grid-area: 1/3/5/3; width: 100%">
-		<div class="row" style="margin-left: 0%; width: 100%; height: 3.8%; color: white; background-color: #00B14F; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
-			<input type="radio" onchange="updateMapChart()" name="filters" value="Temperature" style="margin: 1.5%; margin-left: 7%; cursor: pointer" checked="checked">
-			<label class="Roboto-Light" for="temperature" style="margin-top: 0.5%">Temperature</label>
-			<input type="radio" onchange="updateMapChart()" name="filters" value="Wind" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
-			<label class="Roboto-Light" for="wind" style="margin-top: 0.5%">Wind</label>
-			<input type="radio" onchange="updateMapChart()" name="filters" value="Humidity" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
-			<label class="Roboto-Light" for="humidity" style="margin-top: 0.5%">Humidity</label>
-			<input type="radio" onchange="updateMapChart()" name="filters" value="Pressure" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
-			<label class="Roboto-Light" for="pressure" style="margin-top: 0.5%">Pressure</label>
-		</div>
+        <div class="row" style="margin-left: 0%; width: 100%; height: 3.8%; color: white; background-color: #00B14F; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
+            <input id="temperature_radio" type="radio" onchange="updateMapChart()" name="filters" value="Temperature" style="margin: 1.5%; margin-left: 7%; cursor: pointer" checked="checked">
+            <label for="temperature_radio" class="Roboto-Light" for="temperature" style="margin-top: 0.5%">Temperature</label>
+            <input id="wind_radio" type="radio" onchange="updateMapChart()" name="filters" value="Wind" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
+            <label for="wind_radio" class="Roboto-Light" for="wind" style="margin-top: 0.5%">Wind</label>
+            <input id="humidity_radio" type="radio" onchange="updateMapChart()" name="filters" value="Humidity" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
+            <label for="humidity_radio" class="Roboto-Light" for="humidity" style="margin-top: 0.5%">Humidity</label>
+            <input id="pressure_radio" type="radio" onchange="updateMapChart()" name="filters" value="Pressure" style="margin: 1.5%; margin-left: 7%; cursor: pointer">
+            <label for="pressure_radio" class="Roboto-Light" for="pressure" style="margin-top: 0.5%">Pressure</label>
+        </div>
 		<div id="mapChart" style="height: 96.2%; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
 		</div>
 	</div>
