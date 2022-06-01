@@ -141,14 +141,14 @@
 		</div>
 		<div style="width: 100%; margin-top: 2%; height: 100%">
 			<div class="row" style="margin-left: 0%; width: 100%; height: 3.8%; color: white; background-color: #00B14F; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
-				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Temperature" style="margin: 1.5%; margin-left: 10%; cursor: pointer" checked="checked">
-				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Temperature</label>
-				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Wind" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
-				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Wind</label>
-				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Humidity" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
-				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Humidity</label>
-				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Pressure" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
-				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Pressure</label>
+                <input id="temperature_radio" type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Temperature" style="margin: 1.5%; margin-left: 12.5%; cursor: pointer" checked="checked">
+                <label for="temperature_radio" class="Roboto-Light" for="temperature" style="margin-top: 0.7%; font-size: 20px">Temperature</label>
+                <input id="wind_radio" type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Wind" style="margin: 1.5%; margin-left: 12.5%; cursor: pointer">
+                <label for="wind_radio" class="Roboto-Light" for="wind" style="margin-top: 0.7%; font-size: 20px">Wind</label>
+                <input id="humidity_radio" type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Humidity" style="margin: 1.5%; margin-left: 12.5%; cursor: pointer">
+                <label for="humidity_radio" class="Roboto-Light" for="humidity" style="margin-top: 0.7%; font-size: 20px">Humidity</label>
+                <input id="pressure_radio" type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Pressure" style="margin: 1.5%; margin-left: 12.5%; cursor: pointer">
+                <label for="pressure_radio" class="Roboto-Light" for="pressure" style="margin-top: 0.7%; font-size: 20px">Pressure</label>
 			</div>
 		</div>
 		<div style="width: 100%; height: 500px">
