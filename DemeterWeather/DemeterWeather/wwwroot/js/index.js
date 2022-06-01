@@ -41,14 +41,14 @@ function updateMapChart() {
     if (anyChartRegionId != null) {
         updateLineChart();
     }
-    document.getElementById("container").innerHTML = "";
+    document.getElementById("mapChart").innerHTML = "";
     $.ajax({
         type: "POST",
         url: "/api/Chart/GetMapChartData/",
         data: { "filter": filter },
         success: function(result) {
             var data = [];
-            for (var i = 0; i < result.length; i++) {
+            for (let i = 0; i < result.length; i++) {
                 data.push({
                     "id": result[i]["AnyChartRegionId"],
                     "value": parseFloat(result[i]["Data"])
@@ -57,8 +57,8 @@ function updateMapChart() {
 
             // draw chart
             anychart.onDocumentReady(function() {
-                var map = anychart.map();
-                var dataSet = anychart.data.set(data);
+                const map = anychart.map();
+                const dataSet = anychart.data.set(data);
                 series = map.choropleth(dataSet);
 
                 series.geoIdField("id");
@@ -67,17 +67,23 @@ function updateMapChart() {
                     series.colorScale(anychart.scales.linearColor("#FFC3C3", "#990000"));
                 else if (filter == "Humidity")
                     series.colorScale(anychart.scales.linearColor("#deebf7", "#3182bd"));
-                else if (filter == "Wind") 
+                else if (filter == "Wind")
                     series.colorScale(anychart.scales.linearColor("#C4DDFF", "#112B3C"));
                 else
                     series.colorScale(anychart.scales.linearColor("#DAE5D0", "#B4E197"));
                 series.hovered().fill("#addd8e");
 
-                map.title("Realtime Map for " + filter);
+                series.tooltip().format(function(e) {
+                    return filter.toString() +
+                        ": " +
+                        e.getData("value");
+                });
+
+                map.title(`Realtime Map for ${filter}`);
 
                 map.geoData(anychart.maps["vietnam"]);
 
-                map.container("container");
+                map.container("mapChart");
 
                 map.draw();
 
@@ -107,13 +113,13 @@ function sendPosition(position) {
         url: "api/Region/GetRealtimeWeatherData/",
         data: { "lat": lat, "lon": lon },
         success: function(result) {
-            var superscript = "o";
-            regionName.innerHTML = result["RegionName"]
+            const superscript = "o";
+            regionName.innerHTML = result["RegionName"];
             temp.innerHTML = result["Temperature"] + superscript.sup() + "C";
-            wind.innerHTML = "Wind: " + result["Wind"] + " km/h";
-            humidity.innerHTML = "Humidity: " + result["Humidity"] + "%";
-            pressure.innerHTML = "Pressure: " + result["Pressure"] + " hPa";
-            time.innerHTML = "Time: " + result["Time"].split("T")[0] + " " + result["Time"].split("T")[1];
+            wind.innerHTML = `Wind: ${result["Wind"]} km/h`;
+            humidity.innerHTML = `Humidity: ${result["Humidity"]}%`;
+            pressure.innerHTML = `Pressure: ${result["Pressure"]} hPa`;
+            time.innerHTML = `Time: ${result["Time"].split("T")[0]} ${result["Time"].split("T")[1]}`;
 
             getAnyChartRegionId();
 
@@ -142,21 +148,21 @@ function sendPosition(position) {
 function showError(error) {
     switch (error.code) {
     case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.");
-        setImageVisible();
-        sendPosition();
-        getPredict();
+        console.log("User denied the request for Geolocation.");
         break;
     case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.");
+        console.log("Location information is unavailable.");
         break;
     case error.TIMEOUT:
-        alert("The request to get user location timed out.");
+        console.log("The request to get user location timed out.");
         break;
     case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.");
+        console.log("An unknown error occurred.");
         break;
     }
+    setImageVisible();
+    sendPosition();
+    getPredict();
 }
 
 // function to get the location id for drawing chart by mapping the city string with database in server
@@ -186,13 +192,13 @@ function updateLineChart() {
             anychart.onDocumentReady(function() {
                 result = result.sort(function(data1, data2) {
                     return (`${data1["time"]}`).localeCompare(data2["time"]);
-                })
+                });
 
                 // Convert data to 2d array
                 var newData = [];
                 for (let i = 0; i < 8; i++) {
                     newData[i] = [
-                        result[i]["Time"].slice(11, 16),
+                        result[i]["Time"].slice(0, 7) + " " + result[i]["Time"].slice(11, 16),
                         result[i]["Temperature"],
                         result[i]["Humidity"],
                         result[i]["Pressure"],
@@ -204,26 +210,61 @@ function updateLineChart() {
                 // create tooltip for line chart
                 var tooltip = chart.tooltip();
                 tooltip.format(function(e) {
-                    return "Temperature: " +
-                        newData[this.index][1] +
-                        "\nHumidity: " +
-                        newData[this.index][2] +
-                        "\nPressure: " +
-                        newData[this.index][3] +
-                        "\nWind: " +
-                        newData[this.index][4];
-                })
+                    return `Temperature: ${newData[this.index][1]}\nHumidity: ${newData[this.index][2]}\nPressure: ${
+                        newData[this.index][3]}\nWind: ${newData[this.index][4]}`;
+                });
 
                 chart.background();
 
                 chart.padding([20, 20, 20, 20]);
                 chart.animation(true);
                 chart.crosshair(false);
+
+                var regionName = result[0]["RegionName"];
                 var title = chart.title();
-                title.text("Predicted " + filter + " for " + result[0]["RegionName"]);
+
+                title.useHtml(true);
+
+                if (filter == "Temperature")
+                    title.text(
+                        `Predicted ${filter} for <b style="color:#990000;">${regionName}</b>` + 
+                        "<br><i style=\"font-size: 0.8rem;\">click for detail</a>"
+                    );
+                else if (filter == "Humidity")
+                    title.text(
+                        `Predicted ${filter} for <b style="color:#3182bd;">${regionName}</b>` + 
+                        "<br><i style=\"font-size: 0.8rem;\">click for detail</a>"
+                    );
+                else if (filter == "Wind")
+                    title.text(
+                        `Predicted ${filter} for <b style="color:#112B3C;">${regionName}</b>` + 
+                        "<br><i style=\"font-size: 0.8rem;\">click for detail</a>"
+                    );
+                else
+                    title.text(
+                        `Predicted ${filter} for <b style="color:#00B14F;">${regionName}</b>` + 
+                        "<br><i style=\"font-size: 0.8rem;\">click for detail</a>"
+                    );
+
+                title.enabled(true);
+                title.listen("click",
+                    function() {
+                        window.open(`/Home/Detail?regionName=${regionName}`);
+                    }
+                );
+                title.listen("mouseOver",
+                    function() {
+                        setCursorByID("lineChart", "pointer");
+                    }
+                );
+                title.listen("mouseOut",
+                    function() {
+                        setCursorByID("lineChart", "auto");
+                    }
+                );
+
                 title.fontSize(20);
                 title.fontFamily("Roboto-Light");
-                chart.title().enabled(true);
                 chart.yAxis().enabled(true);
                 chart.xAxis().labels();
                 var dataSet = anychart.data.set(newData);
@@ -234,14 +275,14 @@ function updateLineChart() {
                     "Humidity": 2,
                     "Pressure": 3,
                     "Wind": 4
-                }
+                };
                 var firstSeriesData = dataSet.mapAs({ x: 0, value: mapValue[filter] });
                 var series;
                 if (filter == "Temperature")
                     series = chart.splineArea(firstSeriesData).fill(["#FFC3C3", "#990000"], 90);
                 else if (filter == "Humidity")
                     series = chart.splineArea(firstSeriesData).fill(["#deebf7", "#3182bd"], 90);
-                else if (filter == "Wind") 
+                else if (filter == "Wind")
                     series = chart.splineArea(firstSeriesData).fill(["#C4DDFF", "#112B3C"], 90);
                 else
                     series = chart.splineArea(firstSeriesData).fill(["#DAE5D0", "#B4E197"], 90);
@@ -253,6 +294,14 @@ function updateLineChart() {
             });
         }
     });
+}
+
+function setCursorByID(id, cursorStyle) {
+    var elem;
+    if (document.getElementById && (elem = document.getElementById(id))) {
+        if (elem.style)
+            elem.style.cursor = cursorStyle;
+    }
 }
 
 // function get predict weathr forecast for the next 5 days
@@ -271,11 +320,11 @@ function getPredict(position) {
         url: "/api/Region/GetPredictWeatherData/",
         data: { "lat": lat, "lon": lon },
         success: function(result) {
-            let superscript = "o";
-            for (var i = 0; i < 5; i++) {
-                var date = document.getElementById(`date${i + 1}`);
-                var mean = document.getElementById(`mean${i + 1}`);
-                var range = document.getElementById(`range${i + 1}`);
+            const superscript = "o";
+            for (let i = 0; i < 5; i++) {
+                const date = document.getElementById(`date${i + 1}`);
+                const mean = document.getElementById(`mean${i + 1}`);
+                const range = document.getElementById(`range${i + 1}`);
                 date.innerHTML = result[i]["Date"];
                 mean.innerHTML = parseInt(result[i]["MeanTemperature"]) + superscript.sup() + "C";
                 range.innerHTML = parseInt(result[i]["LowerBoundTemperature"]) +
