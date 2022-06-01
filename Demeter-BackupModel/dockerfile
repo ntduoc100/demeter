@@ -1,0 +1,9 @@
+FROM tensorflow/tensorflow:latest
+
+WORKDIR /code
+COPY model.py model.py
+COPY requirements.txt requirements.txt
+
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT [ "python", "model.py" ]
