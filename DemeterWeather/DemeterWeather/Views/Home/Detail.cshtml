@@ -3,6 +3,7 @@
 }
 
 @section Scripts {
+	<script src="~/js/detail.js" asp-append-version="true"></script>
 	<script>
 		$(document).ready(function() {
 			realtimeClock();
@@ -12,12 +13,12 @@
 }
 
 <div class="container">
-	<div>
+	<div class="row">
 		<div class="grid-container" style="display: grid; grid-template-rows: 300px 200px 300px; gap: 12px; width: 100%">
-			<div class="item1" style="grid-area: 1/1/3/3">
+			<div style="grid-area: 1/1/3/3">
 				<div style="height: 40%; background-image: @ViewData["Background"]; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
 					<div style="height: 22%; background-color: #00B14F; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
-						<p class="Roboto-Medium"
+						<p class="Roboto-Medium" id="regionNameDetail"
 						   style="color: white; text-align: center; font-size: 30px; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)">
 							@ViewData["RegionName"]
 						</p>
@@ -137,6 +138,21 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div style="width: 100%; margin-top: 2%; height: 100%">
+			<div class="row" style="margin-left: 0%; width: 100%; height: 3.8%; color: white; background-color: #00B14F; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2);">
+				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Temperature" style="margin: 1.5%; margin-left: 10%; cursor: pointer" checked="checked">
+				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Temperature</label>
+				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Wind" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
+				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Wind</label>
+				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Humidity" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
+				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Humidity</label>
+				<input type="radio" onchange="updateLineChartDetail()" name="filtersDetail" value="Pressure" style="margin: 1.5%; margin-left: 10%; cursor: pointer">
+				<label class="Roboto-Light" style="margin-top: 0.7%; font-size: 20px">Pressure</label>
+			</div>
+		</div>
+		<div style="width: 100%; height: 500px">
+			<div id="detailLineChart" style="height: 100%; width: 100%; height: 100%; border: none; border-radius: 2px; box-shadow: 0 0px 10px 0 rgba(70, 76, 79, .2)"></div>
 		</div>
 	</div>
 </div>
