@@ -65,7 +65,7 @@ def service_shutdown(signum, frame):
 def interval_runner(worker, interval, **kwargs):
     '''Only start at minute 0 or 30'''
     cur_min, cur_sec = datetime.now().strftime(r'%M-%S').split('-')
-    if (cur_min == '00' or cur_min == '30') and int(cur_sec) <= 0.5:
+    if (int(cur_min) == 0 or int(cur_min) == 30) and int(cur_sec) <= 0.5:
         worker(kwargs['collname'])
 
 

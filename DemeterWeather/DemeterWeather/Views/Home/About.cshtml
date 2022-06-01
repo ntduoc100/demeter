@@ -1,12 +1,15 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<script>
-    $('document').ready(function() {
-        setImageVisible();
-        realtimeClock();
-    });
-</script>
+
+@section Scripts {
+	<script>
+		$(document).ready(function() {
+			realtimeClock();
+			setImageVisible();
+		});
+	</script>
+}
 
 <div class="bg-light">
     <div class="container py-5">

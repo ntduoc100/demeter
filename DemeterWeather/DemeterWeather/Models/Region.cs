@@ -6,13 +6,14 @@ namespace DemeterWeather.Models
     public class Region
     {
         [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         [BsonElement("Place")]
-        public string Place { get; set; }
+        public string RegionName { get; set; }
         [BsonElement("id")]
-        public int PlaceId { get;set; }
+        public int RegionId { get; set; }
         [BsonElement("place_id")]
-        public string ChartPlaceId { get; set; }
+        public string AnyChartRegionId { get; set; }
         [BsonElement("coordinate")]
         public double[] Coordinate { get; set; }
     }
