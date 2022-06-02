@@ -27,7 +27,8 @@ namespace DemeterWeather.Services
                 return new List<WeatherData>();
 
             var query = _predictCol
-                .Find(e => e.RegionName == regionName);
+                .Find(e => e.RegionName == regionName)
+                .SortBy(e => e.Time);
             return query.ToList();
         }
 
