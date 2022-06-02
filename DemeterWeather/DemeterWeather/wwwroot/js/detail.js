@@ -25,9 +25,6 @@ function updateLineChartDetail() {
         data: { "anyChartRegionId": anyChartRegionId },
         success: function(result) {
             anychart.onDocumentReady(function() {
-                result = result.sort(function(data1, data2) {
-                    return (`${data1["time"]}`).localeCompare(data2["time"]);
-                });
 
                 // Convert data to 2d array
                 var newData = [];
